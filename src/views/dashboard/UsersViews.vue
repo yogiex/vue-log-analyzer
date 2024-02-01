@@ -16,9 +16,21 @@
 
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="items"
       :search="search"
-    ></v-data-table>
+    >
+    <template v-slot:item.status="{ item }">
+        <div class="text-end">
+          <v-chip
+            :color="item.stock ? 'green' : 'red'"
+            :text="item.stock ? 'Safe' : 'Warning'"
+            class="text-uppercase"
+            label
+            size="small"
+          ></v-chip>
+        </div>
+      </template>
+  </v-data-table>
   </v-card>
 </template>
 
@@ -46,7 +58,7 @@ for (let i = 1; i <= 10; i++) {
     status: 500
   });
 }
-console.log(jsonData)
+// console.log(jsonData)
 export default {
     name: 'UsersViews',
     data () {
@@ -65,7 +77,7 @@ export default {
           { key: 'user_agent', title: 'User-Agent' },
           { key: 'status', title: 'Status' },
         ],
-        desserts: jsonData,
+        items: jsonData,
       }
     },
 }
