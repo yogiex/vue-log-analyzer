@@ -2,7 +2,9 @@
     <v-layout class="rounded rounded-md">
         <NavbarViews/>
         <SidebarViews/>
+        
         <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+          <router-view />
             <v-container
     class="fill-height"
     fluid
@@ -78,13 +80,15 @@
 import SidebarViews from '../views/dashboard/SidebarViews.vue';
 import NavbarViews from '../views/dashboard/NavbarViews.vue';
 import BarChartViewVue from '../views/dashboard/BarChartView.vue';
+import UsersViews from '../views/dashboard/UsersViews.vue';
 import Chart from 'chart.js/auto'
 export default {
     name: 'DashboardComponents',
     components: {
         SidebarViews,
         NavbarViews,
-        BarChartViewVue
+        BarChartViewVue,
+        UsersViews
     },
     mounted(){
         console.log('mounted log')
