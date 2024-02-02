@@ -5,6 +5,11 @@
         <v-list-item prepend-icon="" title="Users" value="users" to="/dashboard/users" link></v-list-item>
         <v-list-item prepend-icon="" title="Courses" value="inbox"></v-list-item>
         <v-list-item prepend-icon="" title="Activity" value="inbox"></v-list-item>
+        <v-list-item prepend-icon="" title="Alerts" value="inbox" to="/dashboard/alerts" link></v-list-item>
+        <v-list-item prepend-icon="" title="Findings" value="inbox"></v-list-item>
+        <v-list-item prepend-icon="" title="Case" value="inbox"></v-list-item>
+        <v-list-item prepend-icon="" title="Timelines" value="inbox"></v-list-item>
+        <v-list-item prepend-icon="" title="Explore" value="inbox"></v-list-item>
       </v-list>
     </v-navigation-drawer>
   </template>
