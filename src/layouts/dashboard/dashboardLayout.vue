@@ -39,11 +39,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-box {
-  display: flexbox;
-}
-.content-main {
-  background: #ebe9e9;
-  padding: 1rem;
-}
+
 </style>

@@ -20,6 +20,94 @@
         @click:append-inner="onClick"
       ></v-text-field>
     </v-card-text>
+    <v-container>
+      <v-row class="mb-6">
+        <v-col>
+          <v-card
+    class="mx-auto"
+    max-width="344"
+    hover
+    color="primary"
+  >
+    <v-card-item>
+      <v-card-title>
+        Card title
+      </v-card-title>
+      <v-card-subtitle>
+        Card subtitle secondary text
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </v-card-text>
+  </v-card>
+        </v-col>
+        <v-col>
+          <v-card
+    class="mx-auto"
+    max-width="344"
+    hover
+    color="primary"
+  >
+    <v-card-item>
+      <v-card-title>
+        Card title
+      </v-card-title>
+      <v-card-subtitle>
+        Card subtitle secondary text
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </v-card-text>
+  </v-card>
+        </v-col>
+        <v-col>
+          <v-card
+    class="mx-auto"
+    max-width="344"
+    hover
+    color="primary"
+  >
+    <v-card-item>
+      <v-card-title>
+        Card title
+      </v-card-title>
+      <v-card-subtitle>
+        Card subtitle secondary text
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </v-card-text>
+  </v-card>
+        </v-col>
+        <v-col>
+          <v-card
+    class="mx-auto"
+    max-width="344"
+    hover
+    color="primary"
+  >
+    <v-card-item>
+      <v-card-title>
+        Card title
+      </v-card-title>
+      <v-card-subtitle>
+        Card subtitle secondary text
+      </v-card-subtitle>
+    </v-card-item>
+
+    <v-card-text>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </v-card-text>
+  </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
       </v-main>
        </v-layout>
 </template>

@@ -1,5 +1,8 @@
 <template>
-        <v-navigation-drawer >
+        <v-navigation-drawer
+        image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+        permanent
+        theme="dark">
        <v-list
           :lines="false"
           density="compact"

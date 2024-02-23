@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar title="Log Analyzer">
+    <v-app-bar title="Log Analyzer" color="primary">
         <div class="date-now">
             <h2 id="date"></h2>
         </div>
