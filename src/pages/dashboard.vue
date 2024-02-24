@@ -2,11 +2,7 @@
        <v-layout class="rounded rounded-md" style="min-height: 100vh;">
        <SidebarLayout/>
        <NavbarLayout/>
-       
-       <!-- <v-main class="d-flex align-center justify-center content-main" >
-        
-        <h1>tes heloo</h1>
-      </v-main> -->
+    
       <v-main>
         <v-card-text>
       <v-text-field
@@ -107,6 +103,13 @@
   </v-card>
         </v-col>
       </v-row>
+      <!-- end of cards -->
+      <!-- data tables -->
+      <v-row>
+        <v-col>
+          <v-data-table :items="items"></v-data-table>
+        </v-col>
+      </v-row>
     </v-container>
       </v-main>
        </v-layout>
@@ -121,7 +124,33 @@ export default {
     components: { dashboardLayout, SidebarLayout, NavbarLayout },
     data: () => ({
         loaded: false,
-      loading: false,
+        loading: false,
+        items: [
+          {
+            nama: 'Priyagung Elza Yogitama',
+            IP: '123.123.123.123',
+            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
+            LastAccess: '10/Oct/2000:13:55:36 -0700'
+          },
+          {
+            nama: 'Reina',
+            IP: '123.123.123.123',
+            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
+            LastAccess: '10/Oct/2000:13:55:36 -0700'
+          },
+          {
+            nama: 'Zafina',
+            IP: '123.123.123.123',
+            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
+            LastAccess: '10/Oct/2000:13:55:36 -0700'
+          },
+          {
+            nama: 'Claudio',
+            IP: '123.123.123.123',
+            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
+            LastAccess: '10/Oct/2000:13:55:36 -0700'
+          },
+        ]
     }),
     methods: {
         onClick () {
