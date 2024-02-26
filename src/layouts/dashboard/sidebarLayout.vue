@@ -13,6 +13,7 @@
             :key="i"
             :value="item"
             color="primary"
+            :to=item.url
           >
             <template v-slot:prepend>
               <v-icon :icon="item.icon"></v-icon>
@@ -29,13 +30,15 @@
 export default {
     data: () => ({
       items: [
-        { text: 'My Files', icon: 'mdi-folder' },
-        { text: 'Shared with me', icon: 'mdi-account-multiple' },
-        { text: 'Starred', icon: 'mdi-star' },
-        { text: 'Recent', icon: 'mdi-history' },
-        { text: 'Offline', icon: 'mdi-check-circle' },
-        { text: 'Uploads', icon: 'mdi-upload' },
-        { text: 'Backups', icon: 'mdi-cloud-upload' },
+        { text: 'My Files', icon: 'mdi-folder' , url:'dashboard'},
+        { text: 'Users', icon: 'mdi-account-multiple',url: 'users' },
+        { text: 'Courses', icon: 'mdi-star', url:'dashboard' },
+        { text: 'Activity', icon: 'mdi-history', url:'dashboard' },
+        { text: 'Alerts', icon: 'mdi-check-circle',url:'alerts' },
+        { text: 'Findings', icon: 'mdi-upload' , url:'dashboard'},
+        { text: 'Case', icon: 'mdi-cloud-upload', url:'dashboard' },
+        { text: 'Timelines', icon: 'mdi-cloud-upload', url:'dashboard' },
+        { text: 'Explore', icon: 'mdi-cloud-upload', url:'dashboard' },
       ],
     }),
     setup () {
