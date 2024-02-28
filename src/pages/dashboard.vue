@@ -1,7 +1,8 @@
 <template>
        <v-layout class="rounded rounded-md" style="min-height: 100vh;">
-       <SidebarLayout/>
-       <NavbarLayout/>
+        <NavbarLayout/>
+        <SidebarLayout/>
+       
     
       <v-main>
         <v-card-text>

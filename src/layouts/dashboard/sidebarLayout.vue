@@ -12,7 +12,7 @@
             v-for="(item, i) in items"
             :key="i"
             :value="item"
-            color="primary"
+            
             :to=item.url
           >
             <template v-slot:prepend>
@@ -30,15 +30,15 @@
 export default {
     data: () => ({
       items: [
-        { text: 'My Files', icon: 'mdi-folder' , url:'dashboard'},
+        { text: 'Home', icon: 'mdi-folder' , url:'dashboard'},
         { text: 'Users', icon: 'mdi-account-multiple',url: 'users' },
-        { text: 'Courses', icon: 'mdi-star', url:'dashboard' },
-        { text: 'Activity', icon: 'mdi-history', url:'dashboard' },
+        { text: 'Courses', icon: 'mdi-star', url:'#' },
+        { text: 'Activity', icon: 'mdi-history', url:'#' },
         { text: 'Alerts', icon: 'mdi-check-circle',url:'alerts' },
-        { text: 'Findings', icon: 'mdi-upload' , url:'dashboard'},
-        { text: 'Case', icon: 'mdi-cloud-upload', url:'dashboard' },
-        { text: 'Timelines', icon: 'mdi-cloud-upload', url:'dashboard' },
-        { text: 'Explore', icon: 'mdi-cloud-upload', url:'dashboard' },
+        { text: 'Findings', icon: 'mdi-upload' , url:'#'},
+        { text: 'Case', icon: 'mdi-cloud-upload', url:'#' },
+        { text: 'Timelines', icon: 'mdi-cloud-upload', url:'#' },
+        { text: 'Explore', icon: 'mdi-cloud-upload', url:'#' },
       ],
     }),
     setup () {
