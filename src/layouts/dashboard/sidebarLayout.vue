@@ -30,15 +30,15 @@
 export default {
     data: () => ({
       items: [
-        { text: 'Home', icon: 'mdi-folder' , url:'dashboard'},
-        { text: 'Users', icon: 'mdi-account-multiple',url: 'users' },
-        { text: 'Courses', icon: 'mdi-star', url:'#' },
+        { text: 'Home', icon: 'mdi-folder' , url:'/dashboard'},
+        { text: 'Users', icon: 'mdi-account-multiple',url: '/dashboard/user' },
+        { text: 'Courses', icon: 'mdi-book-account', url:'#' },
         { text: 'Activity', icon: 'mdi-history', url:'#' },
-        { text: 'Alerts', icon: 'mdi-check-circle',url:'alerts' },
+        { text: 'Alerts', icon: 'mdi-check-circle',url:'/dashboard/alerts' },
         { text: 'Findings', icon: 'mdi-upload' , url:'#'},
         { text: 'Case', icon: 'mdi-cloud-upload', url:'#' },
         { text: 'Timelines', icon: 'mdi-cloud-upload', url:'#' },
-        { text: 'Explore', icon: 'mdi-cloud-upload', url:'#' },
+        { text: 'System Setting', icon: 'mdi-cog', url:'/dashboard/systems' },
       ],
     }),
     setup () {

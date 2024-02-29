@@ -37,8 +37,6 @@
         </v-data-table>
         </v-card>
         </v-main>
-
-
     </v-layout>
 </template>
 

@@ -3,6 +3,12 @@
         <div class="date-now">
             <h2 id="date"></h2>
         </div>
+        <div>
+            <v-btn prepend-icon="mdi-logout">
+                Logout
+            </v-btn>
+        </div>
+        
     </v-app-bar>
 </template>
 
