@@ -32,6 +32,7 @@ export default {
       items: [
         { text: 'Home', icon: 'mdi-folder' , url:'/dashboard'},
         { text: 'Users', icon: 'mdi-account-multiple',url: '/dashboard/user' },
+        { text: 'Monitoring', icon: 'mdi-monitor-account',url: '/dashboard/monitoring' },
         { text: 'Courses', icon: 'mdi-book-account', url:'#' },
         { text: 'Activity', icon: 'mdi-history', url:'#' },
         { text: 'Alerts', icon: 'mdi-check-circle',url:'/dashboard/alerts' },
