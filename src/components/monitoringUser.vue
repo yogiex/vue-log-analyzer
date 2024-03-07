@@ -133,33 +133,36 @@ export default {
 </script>
 
 <template>
-    <navbarLayout/>
-    <sidebarLayout/>
-    <v-main>
-        <v-container>
-            <v-row>
-                <v-col>
-                    <v-btn variant="outlined">sesi 1</v-btn>
-                    <v-btn variant="outlined">sesi 2</v-btn>
-                    <v-btn variant="outlined">sesi 3</v-btn>
-                    <v-btn variant="outlined">sesi 4</v-btn>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-container class="d-flex align-content-start flex-wrap">
-            <v-card v-for="(user, i) in users" class=" ma-3 ma-3" :elevation="5">
-                <v-card-title> {{ user.nama }}</v-card-title>
-                <v-img 
-                :src="user.img"
-                width="150px"
-                height="150px"
-                >
-                </v-img>
-                <v-card-actions>
-                   <p>Status : </p> <v-btn class="ml-2" :color="user.status == 'bad' ? 'red': 'green'">{{ user.status }}</v-btn>
-                   <v-btn prepend-icon="mdi-open-in-new">Details</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-container>
-    </v-main>
+    <v-layout class="rounded rounded-md" style="min-height: 100vh;">
+        <navbarLayout/>
+        <sidebarLayout/>
+        <v-main>
+            <v-container fluid>
+                <v-row>
+                    <v-col>
+                        <v-btn variant="outlined">sesi 1</v-btn>
+                        <v-btn variant="outlined">sesi 2</v-btn>
+                        <v-btn variant="outlined">sesi 3</v-btn>
+                        <v-btn variant="outlined">sesi 4</v-btn>
+                    </v-col>
+                </v-row>
+            </v-container>
+            <v-container class="d-flex align-content-start flex-wrap">
+                <v-card v-for="(user, i) in users" class=" ma-3 ma-3" :elevation="5">
+                    <v-card-title> {{ user.nama }}</v-card-title>
+                    <v-img 
+                    :src="user.img"
+                    width="150px"
+                    height="150px"
+                    >
+                    </v-img>
+                    <v-card-actions>
+                    <p>Status : </p> <v-btn class="ml-2" :color="user.status == 'bad' ? 'red': 'green'">{{ user.status }}</v-btn>
+                    <v-btn prepend-icon="mdi-open-in-new">Details</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-container>
+        </v-main>
+    </v-layout>
+    
 </template>
