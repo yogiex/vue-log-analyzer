@@ -19,6 +19,7 @@
           placeholder="Email address"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
+          v-model="email"
         ></v-text-field>
   
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -34,13 +35,12 @@
         </div>
   
         <v-text-field
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
           placeholder="Enter your password"
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
-          @click:append-inner="visible = !visible"
+          v-model="password"
         ></v-text-field>
   
         <v-card
@@ -59,6 +59,7 @@
           color="blue"
           size="large"
           variant="tonal"
+          @click="login"
         >
           Log In
         </v-btn>
@@ -75,12 +76,39 @@
         </v-card-text>
       </v-card>
     </div>
+    <!-- <label for="">email</label>
+    <input type="email" v-model="email">
+    <label for="">password</label>
+    <input type="password" v-model="password">
+    <button @click="login">login</button> -->
 </template>
 
-<script>
-export default {
-  data: () => ({
-    visible: false,
-  }),
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+const email = ref("")
+const password = ref("")
+const router = useRouter()
+const login = () => {
+  const auth = getAuth()
+  signInWithEmailAndPassword(auth,email.value,password.value)
+   .then((data) => {
+    console.log(email.value,password.value)
+    console.log('login successfull')
+    console.log(auth.currentUser)
+    router.push('/dashboard')
+   })
+   .catch((error) => {
+    console.log(email.value,password.value)
+    console.log(error.code)
+    alert(error.message)
+   })
 }
+// const visible = false
+// export default {
+//   data: () => ({
+//     visible: false,
+//   }),
+// }
 </script>

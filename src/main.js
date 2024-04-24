@@ -5,16 +5,43 @@
  */
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from "@/plugins";
 
 // Components
-import App from './App.vue'
+import App from "./App.vue";
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from "vue";
 
-const app = createApp(App)
+// Import the functions you need from the SDKs you need
 
-registerPlugins(app)
+import { initializeApp } from "firebase/app";
 
-app.mount('#app')
+// TODO: Add SDKs for Firebase products that you want to use
+
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBRrGPqQrvC4o2Ij3mF_jvmOO30l9xvlIU",
+
+  authDomain: "vue-auth-analyzer.firebaseapp.com",
+
+  projectId: "vue-auth-analyzer",
+
+  storageBucket: "vue-auth-analyzer.appspot.com",
+
+  messagingSenderId: "980989288707",
+
+  appId: "1:980989288707:web:373b7a8dd2bc2beb3d4936",
+};
+// Initialize Firebase
+
+initializeApp(firebaseConfig);
+
+const app = createApp(App);
+
+registerPlugins(app);
+
+app.mount("#app");

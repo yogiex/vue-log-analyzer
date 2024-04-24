@@ -1,10 +1,22 @@
 <script>
 import navbarLayout from '@/layouts/dashboard/navbarLayout.vue'
 import sidebarLayout from '@/layouts/dashboard/sidebarLayout.vue'
-
+import ex1 from './ex1.vue'
+import ex2 from './ex2.vue'
 export default {
     components: {navbarLayout,sidebarLayout},
+    methods: {
+        showSesi1(){
+            this.currentComponent = ex1
+        },
+        showSesi2(){
+            this.currentComponent = ex2
+        },
+        showSesi3(){},
+        showSesi4(){}
+    },
     data: () => ({
+        currentComponent: null,
         users:  [
         {
             "nama": "Cameron",
@@ -139,14 +151,15 @@ export default {
         <v-container>
             <v-row>
                 <v-col>
-                    <v-btn variant="outlined">sesi 1</v-btn>
-                    <v-btn variant="outlined">sesi 2</v-btn>
+                    <v-btn variant="outlined" @click="showSesi1">sesi 1</v-btn>
+                    <button @click="showSesi1">sesi 1</button>
+                    <v-btn variant="outlined" @click="showSesi2">sesi 2</v-btn>
                     <v-btn variant="outlined">sesi 3</v-btn>
                     <v-btn variant="outlined">sesi 4</v-btn>
                 </v-col>
             </v-row>
         </v-container>
-        <v-container class="d-flex align-content-start flex-wrap">
+        <!-- <v-container class="d-flex align-content-start flex-wrap" fluid v-if="showSession">
             <v-card v-for="(user, i) in users" class=" ma-3 ma-3" :elevation="5">
                 <v-card-title> {{ user.nama }}</v-card-title>
                 <v-img 
@@ -160,6 +173,15 @@ export default {
                    <v-btn prepend-icon="mdi-open-in-new">Details</v-btn>
                 </v-card-actions>
             </v-card>
+        </v-container> -->
+        <div :is="currentComponent">
+
+        </div>
+        <!-- <v-container v-if="!showSession">
+            <h1>sesi 3</h1>
         </v-container>
+        <v-container v-if="!showSession">
+            <h1>sesi 4</h1>
+        </v-container> -->
     </v-main>
 </template>
