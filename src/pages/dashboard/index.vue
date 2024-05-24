@@ -106,6 +106,19 @@
       </v-row>
       <!-- end of cards -->
 
+      <!-- start chartjs -->
+      <v-container>
+        <v-row >
+          <v-col class="h-25">
+            <doghnut/>
+          </v-col>
+          <v-col class="h-25">
+            <linechart/>
+          </v-col>
+        </v-row>
+      </v-container>
+      <!-- end of chartjs -->
+
       <!-- data tables -->
       <v-row>
         <v-col>
@@ -122,9 +135,10 @@
 import dashboardLayout from '@/layouts/dashboard/dashboardLayout.vue';
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
-
+import doghnut from '@/components/doghnut.vue';
+import linechart from '@/components/linechart.vue';
 export default {
-    components: { dashboardLayout, SidebarLayout, NavbarLayout },
+    components: { dashboardLayout, SidebarLayout, NavbarLayout, doghnut, linechart },
     data: () => ({
         loaded: false,
         loading: false,

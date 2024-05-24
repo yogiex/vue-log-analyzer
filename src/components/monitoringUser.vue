@@ -151,15 +151,15 @@ export default {
         <v-container>
             <v-row>
                 <v-col>
-                    <v-btn variant="outlined" @click="showSesi1">sesi 1</v-btn>
-                    <button @click="showSesi1">sesi 1</button>
-                    <v-btn variant="outlined" @click="showSesi2">sesi 2</v-btn>
-                    <v-btn variant="outlined">sesi 3</v-btn>
-                    <v-btn variant="outlined">sesi 4</v-btn>
+                    <v-btn variant="outlined" @click="showSesi1" class="ma-4">sesi 1</v-btn>
+                    <!-- <button @click="showSesi1">sesi 1</button> -->
+                    <v-btn variant="outlined" @click="showSesi2" class="ma-4">sesi 2</v-btn>
+                    <v-btn variant="outlined" class="ma-4">sesi 3</v-btn>
+                    <v-btn variant="outlined" class="ma-4">sesi 4</v-btn>
                 </v-col>
             </v-row>
         </v-container>
-        <!-- <v-container class="d-flex align-content-start flex-wrap" fluid v-if="showSession">
+        <v-container class="d-flex align-content-start flex-wrap" fluid>
             <v-card v-for="(user, i) in users" class=" ma-3 ma-3" :elevation="5">
                 <v-card-title> {{ user.nama }}</v-card-title>
                 <v-img 
@@ -173,10 +173,11 @@ export default {
                    <v-btn prepend-icon="mdi-open-in-new">Details</v-btn>
                 </v-card-actions>
             </v-card>
-        </v-container> -->
-        <div :is="currentComponent">
+        </v-container>
+        
+        <!-- <div :is="currentComponent">
 
-        </div>
+        </div> -->
         <!-- <v-container v-if="!showSession">
             <h1>sesi 3</h1>
         </v-container>
