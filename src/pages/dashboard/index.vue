@@ -108,11 +108,11 @@
 
       <!-- start chartjs -->
       <v-container>
-        <v-row >
-          <v-col class="h-25">
+        <v-row  class="h-50">
+          <v-col>
             <doghnut/>
           </v-col>
-          <v-col class="h-25">
+          <v-col>
             <linechart/>
           </v-col>
         </v-row>
