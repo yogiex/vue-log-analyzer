@@ -155,7 +155,6 @@ export default {
                     <!-- <button @click="showSesi1">sesi 1</button> -->
                     <v-btn variant="outlined" @click="showSesi2" class="ma-4">sesi 2</v-btn>
                     <v-btn variant="outlined" class="ma-4">sesi 3</v-btn>
-                    <v-btn variant="outlined" class="ma-4">sesi 4</v-btn>
                 </v-col>
             </v-row>
         </v-container>

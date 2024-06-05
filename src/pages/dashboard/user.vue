@@ -18,16 +18,24 @@
             ></v-text-field>
             </template>
 
+            
+            <!-- <v-data-table
+                    :headers="headers"
+                    :items="dataPeserta"
+                    :search="search"
+            >
+            </v-data-table> -->
+            
             <v-data-table
             :headers="headers"
-            :items="items"
+            :items="dataPeserta"
             :search="search"
             >
-            <template v-slot:item.status="{ item }">
+            <template v-slot:items="{ dataPeserta }">
                 <div class="text-end">
                 <v-chip
-                    :color="item.stock ? 'green' : 'red'"
-                    :text="item.stock ? 'Safe' : 'Warning'"
+                    :color="dataPeserta.status ? 'green' : 'red'"
+                    :text="dataPeserta.status ? 'Safe' : 'Warning'"
                     class="text-uppercase"
                     label
                     size="small"
@@ -44,32 +52,48 @@
 
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
-import axios from 'axios'
-let jsonData = []
-const consumeUser = () => {
-    jsonData.push(axios.get('http://localhost:3000/users'))
-    return jsonData
-}
+import axios from 'axios';
+const items = [
+    {
+      name: 'African Elephant',
+      species: 'Loxodonta africana',
+      diet: 'Herbivore',
+      habitat: 'Savanna, Forests',
+    },
+  ]
+let url = 'http://localhost:5000'
+
 export default {
     components: {NavbarLayout, SidebarLayout},
     data() {
-        return {
+        
+            return {
             search: '',
             headers: [
+            { key: 'userid', title: 'User ID' },
             {
                 align: 'start',
-                key: 'name',
+                key: 'firstname',
                 sortable: false,
                 title: 'Username',
             },
-            { key: 'first_ip', title: 'First IP' },
-            { key: 'last_ip', title: 'Last IP' },
-            { key: 'last_access', title: 'Last Access' },
-            { key: 'user_agent', title: 'User-Agent' },
+            { key: 'lastname', title: 'Full Name' },
+            { key: 'timestart', title: 'Time Start' },
+            { key: 'timefinish', title: 'Time Finished' },
+            { key: 'time_taken', title: 'Durasi Pengerjaan' },
+            { key: 'score', title: 'Nilai' },
             { key: 'status', title: 'Status' },
             ],
-            items: jsonData,
-        }
+            dataPeserta: [],  
+        } 
     },
+    mounted(){
+        axios.get(`${url}/api/daftar_peserta`)
+             .then(val =>{
+                val.data.map(v => this.dataPeserta.push(v))
+                this.dataPeserta = val.data
+                // console.log(this.dataPeserta)
+             })
+    }
 }
 </script>

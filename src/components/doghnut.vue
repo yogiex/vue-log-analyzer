@@ -1,5 +1,7 @@
 <template>
-        <Doughnut :data="chartData" :options="chartOptions" />
+        <div class="" style="height: 40vh;">
+            <Doughnut :data="chartData" :options="chartOptions" />
+        </div>
 </template>
 
 <script >
@@ -12,11 +14,11 @@ export default {
     },
     data: () => ({
         chartData: {
-            labels: ['Low', 'Medium', 'Critical'],
+            labels: ['Low', 'Critical'],
             datasets: [
             {
-                backgroundColor: ['#41B883', '#E46651', '#DD1B16'],
-                data: [40, 20, 80]
+                backgroundColor: ['#41B883', '#DD1B16'],
+                data: [40, 20]
             }
             ]
             },

@@ -107,8 +107,8 @@
       <!-- end of cards -->
 
       <!-- start chartjs -->
-      <v-container>
-        <v-row  class="h-50">
+      <div class="h-25">
+        <v-row>
           <v-col>
             <doghnut/>
           </v-col>
@@ -116,7 +116,7 @@
             <linechart/>
           </v-col>
         </v-row>
-      </v-container>
+      </div>
       <!-- end of chartjs -->
 
       <!-- data tables -->

@@ -1,5 +1,10 @@
 <template>
     <v-app-bar title="Log Analyzer" color="primary">
+        <!-- <v-img
+            class="mx-2"
+            max-height="40"
+            src="../../../public/logo-log-analyzer.png">
+        </v-img> -->
         <div class="date-now">
             <h2 id="date"></h2>
         </div>
