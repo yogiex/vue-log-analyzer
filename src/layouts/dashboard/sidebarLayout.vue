@@ -36,7 +36,7 @@ export default {
         { text: 'Courses', icon: 'mdi-book-account', url:'#' },
         { text: 'Activity', icon: 'mdi-history', url:'#' },
         { text: 'Alerts', icon: 'mdi-check-circle',url:'/dashboard/alerts' },
-        { text: 'Findings', icon: 'mdi-upload' , url:'#'},
+        { text: 'Findings', icon: 'mdi-upload' , url:'/dashboard/findings'},
         { text: 'Case', icon: 'mdi-cloud-upload', url:'#' },
         { text: 'Timelines', icon: 'mdi-cloud-upload', url:'#' },
         { text: 'System Setting', icon: 'mdi-cog', url:'/dashboard/systems' },

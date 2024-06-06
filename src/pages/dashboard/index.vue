@@ -57,8 +57,9 @@
           </v-card-item>
 
         <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <h1>{{ datas[0].total_case }}</h1>
         </v-card-text>
+        
   </v-card>
         </v-col>
         <v-col>
@@ -73,12 +74,12 @@
               Total Users
             </v-card-title>
             <v-card-subtitle>
-              Card subtitle secondary text
+              <!-- tes -->
             </v-card-subtitle>
           </v-card-item>
 
     <v-card-text>
-       <h1>{{ totalUsers }}</h1>
+       <h1>{{ datas[0].total_user }}</h1>
     </v-card-text>
   </v-card>
         </v-col>
@@ -132,55 +133,37 @@
 </template>
 
 <script>
-import dashboardLayout from '@/layouts/dashboard/dashboardLayout.vue';
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
+import axios from 'axios';
+let url = 'http://localhost:5000'
 export default {
-    components: { dashboardLayout, SidebarLayout, NavbarLayout, doghnut, linechart },
-    data: () => ({
-        loaded: false,
-        loading: false,
-        items: [
-          {
-            nama: 'Priyagung Elza Yogitama',
-            IP: '123.123.123.123',
-            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
-            LastAccess: '10/Oct/2000:13:55:36 -0700'
-          },
-          {
-            nama: 'Reina',
-            IP: '123.123.123.123',
-            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
-            LastAccess: '10/Oct/2000:13:55:36 -0700'
-          },
-          {
-            nama: 'Zafina',
-            IP: '123.123.123.123',
-            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
-            LastAccess: '10/Oct/2000:13:55:36 -0700'
-          },
-          {
-            nama: 'Claudio',
-            IP: '123.123.123.123',
-            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0',
-            LastAccess: '10/Oct/2000:13:55:36 -0700'
-          },
-        ],
-        totalCases: 521,
-        totalUsers: 65666,
-        totalRequest: 859
-    }),
+    components: { SidebarLayout, NavbarLayout, doghnut, linechart },
+    data(){
+        return {
+          loaded: false,
+          loading: false,
+          datas: [],
+        }
+    },
     methods: {
         onClick () {
         this.loading = true
-
         setTimeout(() => {
           this.loading = false
           this.loaded = true
         }, 2000)
       },
+    },
+    mounted(){
+        axios.get(`${url}/api/daftar_peserta`)
+             .then(val =>{
+                val.data.map(v => this.datas.push(v))
+                this.datas = val.data[1]
+                console.log(this.datas)
+             })
     }
 }
 </script>

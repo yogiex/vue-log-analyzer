@@ -31,10 +31,11 @@
             :items="dataPeserta"
             :search="search"
             >
-            <template v-slot:dataPeserta.status="{ dataPeserta }">
+            <template v-slot:items="{ dataPeserta }">
                 <div class="text-end">
-                    <v-chip
-                    :text="dataPeserta.status == 'aman' ? 'Safe' : 'Warning'"
+                <v-chip
+                    :color="dataPeserta.status == 1 ? 'green' : 'red'"
+                    :text="dataPeserta.status == 1 ? 'Safe' : 'Warning'"
                     class="text-uppercase"
                     label
                     size="small"
@@ -52,6 +53,14 @@
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
+const items = [
+    {
+      name: 'African Elephant',
+      species: 'Loxodonta africana',
+      diet: 'Herbivore',
+      habitat: 'Savanna, Forests',
+    },
+  ]
 let url = 'http://localhost:5000'
 
 export default {
@@ -59,25 +68,24 @@ export default {
     data() {
         
             return {
-                search: '',
-                headers: [
-                { key: 'userid', title: 'User ID' },
-                {
-                    align: 'start',
-                    key: 'firstname',
-                    sortable: false,
-                    title: 'Username',
-                },
-                { key: 'lastname', title: 'Full Name' },
-                { key: 'timedate', title: 'Timedate' },
-                { key: 'timestart', title: 'Time Start' },
-                { key: 'timefinish', title: 'Time Finished' },
-                { key: 'time_taken', title: 'Durasi Pengerjaan' },
-                { key: 'session', title: 'Sesi Pengerjaan'},
-                { key: 'score', title: 'Nilai' },
-                { key: 'status', title: 'Status' },
-                ],
-                dataPeserta: [],  
+            search: '',
+            headers: [
+            { key: 'userid', title: 'User ID' },
+            {
+                align: 'start',
+                key: 'firstname',
+                sortable: false,
+                title: 'Username',
+            },
+            { key: 'lastname', title: 'Full Name' },
+            { key: 'timestart', title: 'Time Start' },
+            { key: 'timefinish', title: 'Time Finished' },
+            { key: 'timedate', title: 'Time Date' },
+            { key: 'time_taken', title: 'Durasi Pengerjaan' },
+            { key: 'score', title: 'Nilai' },
+            { key: 'status', title: 'Status' },
+            ],
+            dataPeserta: [],  
         } 
     },
     mounted(){
