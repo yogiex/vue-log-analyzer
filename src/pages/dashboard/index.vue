@@ -57,7 +57,8 @@
           </v-card-item>
 
         <v-card-text>
-          <h1>{{ datas[0].total_case }}</h1>
+          <h1>{{ datas.total_case }}</h1>
+          
         </v-card-text>
         
   </v-card>
@@ -79,7 +80,7 @@
           </v-card-item>
 
     <v-card-text>
-       <h1>{{ datas[0].total_user }}</h1>
+       <h1></h1>
     </v-card-text>
   </v-card>
         </v-col>
@@ -100,7 +101,7 @@
     </v-card-item>
 
     <v-card-text>
-      <h1>{{ totalRequest }}</h1>
+      <h1></h1>
     </v-card-text>
   </v-card>
         </v-col>
@@ -138,7 +139,7 @@ import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
 import axios from 'axios';
-let url = 'http://localhost:5000'
+let url = 'http://180.250.135.11:5000'
 export default {
     components: { SidebarLayout, NavbarLayout, doghnut, linechart },
     data(){
@@ -158,7 +159,7 @@ export default {
       },
     },
     mounted(){
-        axios.get(`${url}/api/daftar_peserta`)
+        axios.get(`${url}/get_summary`)
              .then(val =>{
                 val.data.map(v => this.datas.push(v))
                 this.datas = val.data[1]

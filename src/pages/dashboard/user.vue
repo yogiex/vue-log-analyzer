@@ -31,10 +31,11 @@
             :items="dataPeserta"
             :search="search"
             >
-            <template v-slot:dataPeserta.status="{ dataPeserta }">
-                <div class="text-end">
+            <template v-slot:item.status="{ item }">
+                <div class="">
                     <v-chip
-                    :text="dataPeserta.status == 'aman' ? 'Safe' : 'Warning'"
+                    :text="dataPeserta.status == 'aman' ? 'Warning' : 'Safe'"
+                    :color="dataPeserta.status == 'aman' ? 'red' : 'green'" 
                     class="text-uppercase"
                     label
                     size="small"
@@ -52,7 +53,7 @@
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
-let url = 'http://localhost:5000'
+let url = 'http://180.250.135.11:5000'
 
 export default {
     components: {NavbarLayout, SidebarLayout},

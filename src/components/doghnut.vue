@@ -8,7 +8,7 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
 import axios from 'axios';
-let url = 'http://localhost:5000'
+let url = 'http://180.250.135.11:5000'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 export default {
@@ -33,7 +33,7 @@ export default {
         }
     },
     mounted(){
-        axios.get(`${url}/api/daftar_peserta`)
+        axios.get(`${url}/get_summary`)
              .then(val =>{
                 val.data.map(v => this.datas.push(v))
                 this.datas = val.data[1]

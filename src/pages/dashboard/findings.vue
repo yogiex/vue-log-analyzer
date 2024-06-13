@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
     <v-layout class="rounded rounded-md" style="min-height: 100vh;">
         <NavbarLayout/>
@@ -17,32 +18,28 @@
                 hide-details
             ></v-text-field>
             </template>
-
             
-            <!-- <v-data-table
-                    :headers="headers"
-                    :items="dataPeserta"
-                    :search="search"
-            >
-            </v-data-table> -->
-            
+           
             <v-data-table
-            :headers="headers"
-            :items="dataPeserta"
-            :search="search"
+                :headers="headers"
+                :items="dataPeserta"
+                :search="search"
             >
-            <template v-slot:items="{ dataPeserta }">
-                <div class="text-end">
+            <template v-slot:item.status="{ item }">
+                <div class="" >
                 <v-chip
-                    :color="dataPeserta.status == 1 ? 'green' : 'red'"
-                    :text="dataPeserta.status == 1 ? 'Safe' : 'Warning'"
+                    :color="dataPeserta.status == 'terindikasi' ? 'green' : 'red'"
+                    :text="dataPeserta.status == 'terindikasi' ? 'Aman' : 'Terindikasi'"
                     class="text-uppercase"
                     label
                     size="small"
                 ></v-chip>
                 </div>
             </template>
-        </v-data-table>
+            </v-data-table>
+
+            
+            
         </v-card>
         </v-main>
     </v-layout>
@@ -61,7 +58,7 @@ const items = [
       habitat: 'Savanna, Forests',
     },
   ]
-let url = 'http://localhost:5000'
+let url = 'http://180.250.135.11:5000'
 
 export default {
     components: {NavbarLayout, SidebarLayout},
@@ -89,7 +86,7 @@ export default {
         } 
     },
     mounted(){
-        axios.get(`${url}/api/daftar_peserta`)
+        axios.get(`${url}/api/get_cases`)
              .then(val =>{
                 val.data.map(v => this.dataPeserta.push(v))
                 this.dataPeserta = val.data
