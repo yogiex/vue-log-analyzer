@@ -18,9 +18,9 @@ A log analyzer in a Learning Management System (LMS) environment is a tool desig
 |----|-----------------------------------------|-----------|
 | 1  | ![](./img/screen-login-page.jpg)        | /login    |
 | 2  | ![](./img/screen-dashboard-home.jpg)                                        |  /dashboard   |
-|        |       |     |
-|        |       |     |
-
+|  3      |  ![](./img/screen-users.jpg)     |  /dashboard/   |
+|  4     | ![](./img/screen-findings.jpg)      | /dashboard/findings    |
+|  5      |      ![](./img/screen-alerts.jpg)              | /dashboard/alerts |
 
 
 ## 💿 Install
@@ -42,3 +42,4 @@ Copyright (c) 2016-present Vuetify, LLC
 
 ## Todo list features
 - [ ] Real time
+- [ ] Change 
