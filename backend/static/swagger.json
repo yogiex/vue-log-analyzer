@@ -1,0 +1,34 @@
+{
+ "openapi": "3.0.0",
+ "info": {
+  "description": "Log Analyzer Backend Flask and machine learning",
+  "version": "1.0",
+  "title": "Log Analyzer Backend Flask",
+  "license": {
+    "name": "MIT",
+    "url": "https://opensource.org/license/MIT"
+  }
+ },
+ "paths": {
+	"/" :{
+	  "get": {
+        "description": "Root Index"
+		},
+	  "responses": {
+        "200": {
+            "description": "Success"
+        }
+    }
+},
+    "/api/daftar_peserta":{
+        "get": {
+            "description": "tes"
+        }
+    },
+    "/dump": {
+        "get": {
+            "description": "tes" 
+        } 
+    }
+}
+}
