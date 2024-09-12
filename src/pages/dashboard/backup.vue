@@ -36,7 +36,7 @@
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
-let urlEndpoint = import.meta.env.VITE_APP_URL_ENDPOINT 
+let urlEndpoint = import.meta.env.urlFlask 
 
 export default {
     components: {NavbarLayout,SidebarLayout},
@@ -60,13 +60,15 @@ export default {
             dataFiles: [],  
         }
     },
-    mounted() {
-        axios.get(`${urlEndpoint}/directory`)
-            .then(val => {
-                val.data.map(v => this.dataFiles.push(v))
-                this.dataFiles = val.data 
-                console.log(this.dataFiles)
-            })
+    async mounted() {
+        // axios.get(`${urlEndpoint}/directory`)
+        //     .then(val => {
+        //         val.data.map(v => this.dataFiles.push(v))
+        //         this.dataFiles = val.data 
+        //         console.log(this.dataFiles)
+        //     })
+        const response = await axios.get(`${urlEndpoint}/directory`)
+        console.log(response)
             console.log(`${urlEndpoint}/directory`)
     }
 }

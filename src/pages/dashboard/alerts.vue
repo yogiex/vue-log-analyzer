@@ -70,7 +70,7 @@
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
-let url = 'http://180.250.135.11:5000'
+let url = import.meta.env.urlFlask
 export default {
     components: {NavbarLayout, SidebarLayout},
     data() {
