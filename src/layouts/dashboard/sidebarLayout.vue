@@ -41,6 +41,7 @@ export default {
         { text: 'Reporting', icon: 'mdi-file-pdf-box', url:'/dashboard/reporting' },
         { text: 'Backup Data', icon: 'mdi-cog', url:'/dashboard/backup' },
         { text: 'Threshold', icon: 'mdi-cog', url:'/dashboard/threshold' },
+        { text: 'Calender', icon: 'mdi-calender-month', url:'/dashboard/calendar' },
       ],
     }),
     setup () {

@@ -60,16 +60,17 @@ export default {
             dataFiles: [],  
         }
     },
-    mounted() {
-        axios.get(`${urlEndpoint}/directory`)
-            .then(val => {
-                val.data.map(v => this.dataFiles.push(v))
-                this.dataFiles = val.data 
-                console.log(this.dataFiles)
-            })
-        // const response = await axios.get(`${urlEndpoint}/directory`)
-        // console.log(response)
-        //     console.log(`${urlEndpoint}/directory`)
+    async mounted() {
+        // axios.get(`${urlEndpoint}/directory`)
+        //     .then(val => {
+        //         val.data.map(v => this.dataFiles.push(v))
+        //         this.dataFiles = val.data 
+        //         console.log(val)
+        //         console.log(this.dataFiles)
+        //     })
+        const response = await axios.get(`${urlEndpoint}/directory`)
+        console.log(response)
+            console.log(`${urlEndpoint}/directory`)
     }
 }
 </script>
