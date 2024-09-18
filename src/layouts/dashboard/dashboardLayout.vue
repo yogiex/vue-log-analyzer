@@ -1,8 +1,8 @@
 <template>
   
       <v-layout>
-        <NavbarLayout></NavbarLayout>
-      <SidebarLayout/>
+        <NavbarLayout/>
+        <SidebarLayout/>
       <v-main>
         
       </v-main>
