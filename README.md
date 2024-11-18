@@ -16,6 +16,15 @@ A log analyzer in a Learning Management System (LMS) environment is a tool desig
    - Behavioral analysis to identify student behavior patterns.
    - Anomaly detection for unusual patterns indicating issues.
 
+## Firebase Authenticator
+
+We have integrated Firebase Authentication into this project to provide a more seamless and secure user experience. Firebase Auth allows users to:
+
+1. Sign up: Create a new account with a strong email and password.
+2. Log in: Log in to an existing account using various authentication methods.
+3. Log out: Log out of their account at any time.
+4. Forgot Password: Reset the password if forgotten.
+
 ## Images
 
 | No  | Image                                | Url                 |

@@ -1,14 +1,10 @@
 <template>
-    <v-layout class="rounded rounded-md" style="min-height: 100vh;">
-        <NavbarLayout/>
-        <SidebarLayout/>
-        <v-main>
-            <v-card
-    class="mx-auto"
-    max-width="344"
-    title="User Threshold"
-  >
-    <v-container>
+  <v-layout class="rounded rounded-md" style="min-height: 100vh;">
+    <NavbarLayout />
+    <SidebarLayout />
+    <v-main>
+      <!-- <v-card class="mx-auto" max-width="344" title="User Threshold">
+        <v-container>
       <v-row>
         <v-col>
             <v-text-field
@@ -48,7 +44,7 @@
         </v-col>
       </v-row>
 
-      
+
 
       <v-row>
         <v-col>
@@ -69,29 +65,118 @@
         </v-col>
       </v-row>
 
-      
-
-      <!-- <v-checkbox
-        v-model="terms"
-        color="secondary"
-        label="I agree to site terms and conditions"
-      ></v-checkbox> -->
     </v-container>
 
-    <v-divider></v-divider>
+        <v-divider></v-divider>
 
-    <v-card-actions>
-      <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-      <v-btn color="success">
-        Complete Threshold 
+          <v-btn color="success">
+            Complete Threshold
 
-        <v-icon icon="mdi-chevron-right" end></v-icon>
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-        </v-main>
-    </v-layout>
+            <v-icon icon="mdi-chevron-right" end></v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card> -->
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card title="Treshold" variant="tonal">
+              <v-container>
+                <v-text-field variant="outlined" label="Insert Treshold">
+
+                </v-text-field>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn color="blue-accent-3">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-layout>
 </template>
 
 <script>
@@ -101,11 +186,11 @@ import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
 export default {
-    components: { dashboardLayout, SidebarLayout, NavbarLayout },
-    methods: {
-        async pushThreshold(){
+  components: { dashboardLayout, SidebarLayout, NavbarLayout },
+  methods: {
+    async pushThreshold() {
 
-        }
     }
+  }
 }
 </script>

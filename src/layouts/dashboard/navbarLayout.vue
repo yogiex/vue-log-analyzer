@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar title="Log Analyzer" color="primary">
+  <v-app-bar title="Log Analyzer" color="primary" theme="">
     <!-- <v-img class="mx-2" max-height="40" src="../../../public/logo-log-analyzer.png">
     </v-img> -->
     <div class="date-now">
@@ -8,7 +8,7 @@
     <div>
       <v-btn color="">
         <span class="mdi mdi-account-circle"></span>
-
+        {{ email }}
         <v-menu activator="parent">
           <v-list>
             <v-list-item>
@@ -48,24 +48,10 @@ function updateTime() {
   let fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`
   document.getElementById("date").innerHTML = fullTime
 }
-const getUserById = (u) => { // u = user id
-  const userData = null
-  getAuth()
-    .getUser(u)
-    .then((userRecord) => {
-      // See the UserRecord reference doc for the contents of userRecord.
-      console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
-      userData = userRecord
-    })
-    .catch((error) => {
-      console.log('Error fetching user data:', error);
-    });
-  console.log(userData)
-  return { userData }
-}
 
-// alert(getUserById)
-console.log(getAuth())
+const auth = getAuth()
+// console.log(auth, auth.currentUser, auth.currentUser.email)
+const email = auth.currentUser.email
 const logout = () => {
   const auth = getAuth()
   const router = useRouter()
