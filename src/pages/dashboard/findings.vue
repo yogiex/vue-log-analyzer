@@ -19,6 +19,14 @@
                 size="small"></v-chip>
             </div>
           </template>
+          <template v-slot:item.action="{ item }">
+            <v-icon class="me-2" size="small" @click="editItem(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon size="small" @click="deleteItem(item)">
+              mdi-delete
+            </v-icon>
+          </template>
         </v-data-table>
 
 
@@ -53,8 +61,8 @@ const end = faker.date.soon({ refDate: start });
 const dataPeserta = [
   {
     userid: faker.string.uuid(),
-    firstname: faker.string.firstname,
-    lastname: faker.string.lastname,
+    firstname: faker.person.firstName(),
+    lastname: faker.person.lastName(),
     timestart: start,
     timefinish: end,
     timedate: fullTime,
@@ -64,8 +72,8 @@ const dataPeserta = [
   },
   {
     userid: faker.string.uuid(),
-    firstname: faker.string.firstname,
-    lastname: faker.string.lastname,
+    firstname: faker.person.firstName(),
+    lastname: faker.person.lastName(),
     timestart: start,
     timefinish: end,
     timedate: fullTime,
@@ -75,8 +83,8 @@ const dataPeserta = [
   },
   {
     userid: faker.string.uuid(),
-    firstname: faker.string.firstname,
-    lastname: faker.string.lastname,
+    firstname: faker.person.firstName(),
+    lastname: faker.person.lastName(),
     timestart: start,
     timefinish: end,
     timedate: fullTime,
