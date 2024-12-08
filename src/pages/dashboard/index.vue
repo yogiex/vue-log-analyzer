@@ -106,12 +106,14 @@
 </template>
 
 <script>
+import { getAuth } from 'firebase/auth'
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
 import axios from 'axios';
 let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
+const auth = getAuth();
 export default {
   components: { SidebarLayout, NavbarLayout, doghnut, linechart },
   data() {
@@ -119,6 +121,7 @@ export default {
       loaded: false,
       loading: false,
       datas: [],
+      isAuthenticated: false,
     }
   },
   methods: {
@@ -137,6 +140,8 @@ export default {
         this.datas = val.data[1]
         console.log(this.datas)
       })
+
+    console.log(auth.currentUser)
   }
 }
 </script>
