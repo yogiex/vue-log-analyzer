@@ -57,6 +57,62 @@ npm run dev only for development
 - [x] Authentification login with firebase
 - [x] Backup Data
 
+## Backend
+
+### Step by step
+
+### Persiapan log storage
+
+```sql
+create table backup_attempt (
+    id int auto_increment,
+    attempt_id int,
+    id_peserta int,
+    firstname varchar(99),
+    lastname varchar(250),
+    course_name varchar(250),
+    quiz_name varchar(250),
+    unique_id int,
+    layout longtext,
+    timestart bigint(10),
+    timefinish bigint(10),
+    score decimal(10,5),
+    primary key(id)
+);
+```
+
+```sql
+CREATE TABLE peserta_history (
+    id SERIAL PRIMARY KEY, -- auto-incrementing primary key
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    userid VARCHAR(255) NOT NULL,
+    timedate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    timestart TIME NULL DEFAULT NULL,
+    timefinish TIME NULL DEFAULT NULL,
+    timetaken TIME NULL DEFAULT NULL,
+    score INT NOT NULL,
+    _session VARCHAR(255) NOT NULL,
+    _status INT NOT NULL,
+    shift VARCHAR(255) NOT NULL,
+    CONSTRAINT unique_timestamps UNIQUE (timedate)
+);
+```
+
+```sql
+CREATE TABLE case_history (
+  cases longtext NOT NULL
+);
+```
+
+```sql
+CREATE TABLE daftar_proktor (
+  chatid int NOT NULL
+);
+```
+
+Setelah membuat db tersebut, langsung jalankan app.py
+
 ## 📑 License
 
 [MIT](http://opensource.org/licenses/MIT)
