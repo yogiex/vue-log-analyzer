@@ -46,7 +46,7 @@ function updateTime() {
   let mm = currentTime.getMinutes();
   let n = currentTime.toLocaleDateString()
   let fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`
-  document.getElementById("date").innerHTML = fullTime
+  // document.getElementById("date").innerHTML = fullTime
 }
 const router = useRouter()
 const auth = getAuth()

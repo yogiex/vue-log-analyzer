@@ -23,7 +23,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ Math.ceil(Math.random() * 1000000) }}</h1>
+                <h1>{{ datas[0].recordCount }}</h1>
               </v-card-text>
             </v-card>
           </v-col>
@@ -39,8 +39,8 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ Math.ceil(Math.random() * 1000000) }}</h1>
 
+                <h1>{{ datas[0].totalCase }}</h1>
               </v-card-text>
 
             </v-card>
@@ -57,7 +57,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ Math.ceil(Math.random() * 1000000) }}</h1>
+                <h1>{{ datas[0].totalUser }}</h1>
               </v-card-text>
             </v-card>
           </v-col>
@@ -73,7 +73,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ Math.ceil(Math.random() * 1000000) }}</h1>
+                <h1>{{ datas[0].totalRequest }}</h1>
               </v-card-text>
             </v-card>
           </v-col>
@@ -134,13 +134,22 @@ export default {
     },
   },
   mounted() {
-    axios.get(`${url}/get_summary`)
+    // axios.get(`${url}/get_summary`)
+    //   .then(val => {
+    //     val.data.map(v => this.datas.push(v))
+    //     this.datas = val.data[1]
+    //     console.log(this.datas)
+    //   })
+    axios.get(`http://localhost:3000/allsummary.json`)
       .then(val => {
-        val.data.map(v => this.datas.push(v))
-        this.datas = val.data[1]
-        console.log(this.datas)
+        console.log(val.data)
+        this.datas.push(val.data)
       })
-
+    // const response = fetch(`http://localhost:3000/allsummary.json`)
+    // response.then(val => {
+    //   console.log(val)
+    // })
+    console.log(this.datas)
     console.log(auth.currentUser)
   }
 }

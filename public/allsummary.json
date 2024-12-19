@@ -1,0 +1,20 @@
+{
+    "recordCount": 123,
+    "totalCase": 10,
+    "totalUser":599,
+    "totalRequest": 242321,
+    "severity": [
+        {
+            "critical":100,
+            "low":12
+        }  
+    ],
+    "timeline": [
+        { "january": 10,
+         "februari":12,
+        "march":14,
+        "april":40,
+        "may":21,
+        "june":34}
+    ]
+}

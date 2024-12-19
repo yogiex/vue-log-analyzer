@@ -8,6 +8,7 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
 import axios from 'axios';
+// eslint-disable-next-line no-unused-vars
 let url = 'http://180.250.135.11:5000'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -33,10 +34,17 @@ export default {
     }
   },
   mounted() {
-    axios.get(`${url}/get_summary`)
+    // axios.get(`${url}/get_summary`)
+    //   .then(val => {
+    //     val.data.map(v => this.datas.push(v))
+    //     this.datas = val.data[1]
+    //     console.log(`logging di donnut ${this.datas}`)
+    //   })
+    axios.get(`http://localhost:3000/allsummary.json`)
       .then(val => {
-        val.data.map(v => this.datas.push(v))
-        this.datas = val.data[1]
+        // val.data.map(v => this.datas.push(v))
+        // this.datas = val.data[1]
+        this.datas.push(val.data)
         console.log(`logging di donnut ${this.datas}`)
       })
   }
