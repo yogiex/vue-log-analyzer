@@ -23,7 +23,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ datas[0].recordCount }}</h1>
+                <!-- <h1>{{ datas[0].recordCount }}</h1> -->
               </v-card-text>
             </v-card>
           </v-col>
@@ -40,7 +40,7 @@
 
               <v-card-text>
 
-                <h1>{{ datas[0].totalCase }}</h1>
+                <!-- <h1>{{ datas[0].totalCase }}</h1> -->
               </v-card-text>
 
             </v-card>
@@ -57,7 +57,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ datas[0].totalUser }}</h1>
+                <!-- <h1>{{ datas[0].totalUser }}</h1> -->
               </v-card-text>
             </v-card>
           </v-col>
@@ -73,7 +73,7 @@
               </v-card-item>
 
               <v-card-text>
-                <h1>{{ datas[0].totalRequest }}</h1>
+                <!-- <h1>{{ datas[0].totalRequest }}</h1> -->
               </v-card-text>
             </v-card>
           </v-col>

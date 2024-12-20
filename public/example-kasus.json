@@ -1,0 +1,30 @@
+[
+    {
+        "firstname": "ILHAM", 
+        "lastname": "AGUSTIAN", 
+        "score": 44, 
+        "session": "listening", 
+        "shift": "Shift 3", 
+        "status": "terindikasi", 
+        "time_taken": "00:29:59", 
+        "timedate": "Mon, 01 Apr 2024 07:06:55 GMT", 
+        "timefinish": "14:36:54", 
+        "timestart": "14:06:55", 
+        "track_progress": "open", 
+        "userid": 106222
+    },
+    {
+        "firstname": "MUTHIA", 
+        "lastname": "NURHIKMAH", 
+        "score": 23, 
+        "session": "listening", 
+        "shift": "Shift 3", 
+        "status": "terindikasi", 
+        "time_taken": "00:44:41", 
+        "timedate": "Mon, 01 Apr 2024 07:06:53 GMT", 
+        "timefinish": "14:51:34", 
+        "timestart": "14:06:53", 
+        "track_progress": "open", 
+        "userid": 36495
+    }
+]
