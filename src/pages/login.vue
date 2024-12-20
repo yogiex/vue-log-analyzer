@@ -30,7 +30,7 @@
         <v-card max-width="400" prepend-icon="mdi-update" text="Authentication failed! Invalid credentials."
           title="Auth Error">
           <template v-slot:actions>
-            <v-btn class="ms-auto" text="Ok" @click="dialog = false"></v-btn>
+            <v-btn class="ms-auto" text="Ok" @click="dialog"></v-btn>
           </template>
         </v-card>
       </v-dialog>
@@ -39,61 +39,34 @@
 
 
   </div>
-
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-const email = ref('')
-const password = ref('')
+
+const email = ref("")
+const password = ref("")
+let dialog = false
 const router = useRouter()
-export default {
-  data() {
-    return {
-      dialog: false,
-      email: '',
-      password: ''
-    }
-  },
-  methods: {
-    login() {
-      const auth = getAuth()
-      signInWithEmailAndPassword(auth, this.email, this.password)
-        .then((data) => {
-          router.push('/dashboard')
-          console.log(this.email, this.password)
+const login = () => {
+  const auth = getAuth()
+  signInWithEmailAndPassword(auth, email.value, password.value)
+    .then((data) => {
+      console.log(email.value, password.value)
+      console.log('login successfull')
+      console.log(auth.currentUser)
+      console.log(auth.currentUser.email)
+      router.push('/dashboard')
+    })
+    .catch((error) => {
+      console.log(email.value, password.value)
+      console.log(error.code)
+      // alert(error.code)
+      dialog = false
+      // ErrorMessage.value = error.code
+    })
 
-        }).catch((error) => {
-          console.log(error.code)
-          alert(error.code)
-        })
-    }
-  }
 }
-// let dialog = false
-
-// const email = ref("")
-// const password = ref("")
-// const router = useRouter()
-// const login = () => {
-//   const auth = getAuth()
-//   signInWithEmailAndPassword(auth, email.value, password.value)
-//     .then((data) => {
-//       console.log(email.value, password.value)
-//       console.log('login successfull')
-//       console.log(auth.currentUser)
-//       console.log(auth.currentUser.email)
-//       router.push('/dashboard')
-//     })
-//     .catch((error) => {
-//       console.log(email.value, password.value)
-//       console.log(error.code)
-//       alert(error.code)
-//       // dialog = true
-//       // ErrorMessage.value = error.code
-//     })
-
-// }
 </script>
