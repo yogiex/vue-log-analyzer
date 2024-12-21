@@ -23,7 +23,6 @@ export default {
       { text: 'Activity', icon: 'mdi-timeline', url: '/' },
       { text: 'Alerts', icon: 'mdi-bell-alert', url: '/dashboard/alerts' },
       { text: 'Findings', icon: 'mdi-magnify-expand', url: '/dashboard/findings' },
-      { text: 'Case', icon: 'mdi-cloud-upload', url: '/' },
       { text: 'Backup Data', icon: 'mdi-cloud-download', url: '/dashboard/backup' },
       { text: 'Threshold', icon: 'mdi-speedometer', url: '/dashboard/threshold' },
       { text: 'Calender', icon: 'mdi-calendar-month', url: '/dashboard/calendar' },

@@ -73,7 +73,7 @@
               </v-card-item>
 
               <v-card-text>
-                <!-- <h1>{{ datas[0].totalRequest }}</h1> -->
+                <h1>{{ datas[0].totalRequest }}</h1>
               </v-card-text>
             </v-card>
           </v-col>
@@ -112,6 +112,7 @@ import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
 import axios from 'axios';
+import { useRoute } from 'vue-router'
 let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
 const auth = getAuth();
 export default {
@@ -132,6 +133,19 @@ export default {
         this.loaded = true
       }, 2000)
     },
+  },
+  beforeMount() {
+    console.log("tes")
+    let route = useRoute();
+    axios.get(`http://localhost:3000/example-kasus.json`).then(val => {
+      val.data.forEach((element, idx) => {
+        if (element.userid == route.params.id) {
+          this.datas = element;
+        }
+      });
+      console.log(this.datas);
+    });
+    return { datas }
   },
   mounted() {
     // axios.get(`${url}/get_summary`)
