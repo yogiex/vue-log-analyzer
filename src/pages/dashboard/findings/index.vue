@@ -20,12 +20,6 @@
             </div>
           </template>
           <template v-slot:item.action="{ item }">
-            <v-icon class="me-2" size="small" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon class="me-2" size="small" @click="deleteItem(item)">
-              mdi-delete
-            </v-icon>
             <!-- <v-icon class="me-2" size="small" @click="printToDoc(item.userid)">
               mdi-cloud-print
             </v-icon> -->
@@ -33,6 +27,7 @@
               <v-icon class="me-2" size="small">
                 mdi-cloud-print
               </v-icon>
+              Download
             </a>
           </template>
         </v-data-table>
@@ -45,63 +40,12 @@
 
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
-import { faker } from '@faker-js/faker';
 import axios from 'axios';
 
 let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
-let currentTime = new Date();
-let m = currentTime.getMonth();
-let d = currentTime.getDay()
-let s = currentTime.getSeconds();
-let y = currentTime.getFullYear();
-let h = currentTime.getHours();
-let mm = currentTime.getMinutes();
-let n = currentTime.toLocaleDateString()
-let fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`
-
-const start = faker.date.soon();
-const end = faker.date.soon({ refDate: start });
-
-
-const dataPeserta = [
-  {
-    userid: faker.string.uuid(),
-    firstname: faker.person.firstName(),
-    lastname: faker.person.lastName(),
-    timestart: start,
-    timefinish: end,
-    timedate: fullTime,
-    time_taken: faker.date.between({ from: start, to: end }),
-    score: faker.number.int({ min: 20, max: 45 }),
-    status: 'Terindikasi'
-  },
-  {
-    userid: faker.string.uuid(),
-    firstname: faker.person.firstName(),
-    lastname: faker.person.lastName(),
-    timestart: start,
-    timefinish: end,
-    timedate: fullTime,
-    time_taken: faker.date.between({ from: start, to: end }),
-    score: faker.number.int({ min: 20, max: 45 }),
-    status: 'Terindikasi'
-  },
-  {
-    userid: faker.string.uuid(),
-    firstname: faker.person.firstName(),
-    lastname: faker.person.lastName(),
-    timestart: start,
-    timefinish: end,
-    timedate: fullTime,
-    time_taken: faker.date.between({ from: start, to: end }),
-    score: faker.number.int({ min: 20, max: 45 }),
-    status: 'Terindikasi'
-  }
-]
 export default {
   components: { NavbarLayout, SidebarLayout },
   data() {
-
     return {
       search: '',
       headers: [

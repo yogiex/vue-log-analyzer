@@ -42,8 +42,6 @@ export default {
     //   })
     axios.get(`http://localhost:3000/allsummary.json`)
       .then(val => {
-        // val.data.map(v => this.datas.push(v))
-        // this.datas = val.data[1]
         this.datas.push(val.data)
         console.log(`logging di donnut ${this.datas}`)
       })
