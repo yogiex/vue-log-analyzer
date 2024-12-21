@@ -12,6 +12,7 @@
     "axios": "^1.6.8",
     "chart.js": "^4.4.3",
     "core-js": "^3.34.0",
+    "cypress": "^13.17.0",
     "firebase": "^10.11.0",
     "html2pdf.js": "^0.10.2",
     "roboto-fontface": "*",
