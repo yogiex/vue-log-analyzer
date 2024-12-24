@@ -5,10 +5,10 @@
 
 
     <v-main>
-      <v-card-text>
+      <!-- <v-card-text>
         <v-text-field :loading="loading" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
           single-line hide-details @click:append-inner="onClick"></v-text-field>
-      </v-card-text>
+      </v-card-text> -->
       <v-container>
         <v-row class="mb-6">
           <v-col>
@@ -107,6 +107,7 @@
 
 <script>
 import { getAuth } from 'firebase/auth'
+import { useAuthStore } from '@/store/auth'
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import doghnut from '@/components/doghnut.vue';
@@ -116,6 +117,7 @@ import axios from 'axios';
 let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
 const auth = getAuth();
 let datas = []
+const authStore = useAuthStore
 export default {
   components: { SidebarLayout, NavbarLayout, doghnut, linechart },
   data() {
@@ -127,6 +129,7 @@ export default {
     }
   },
   beforeMount() {
+    authStore().init()
     console.log("tes")
     axios.get(`http://localhost:3000/allsummary.json`).then(val => {
       // console.log(datas)

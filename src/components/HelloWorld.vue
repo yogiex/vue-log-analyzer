@@ -42,9 +42,8 @@
           </h1>
 
           <div class="text-body-1 text-medium-emphasis mb-10">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore
-            voluptatibus!
-            Eaque cupiditate minima, at placeat totam!
+            Empowering Your Security with Advanced Proactive Forensic Solutions: Comprehensive Log Management to Detect,
+            Prevent, and Resolve Threats Effectively
           </div>
 
           <div class="d-flex ga-4 justify-center">

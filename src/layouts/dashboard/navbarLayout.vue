@@ -4,6 +4,9 @@
       <h2 id="date"></h2>
     </div>
     <div>
+      <p>{{ email }}</p>
+    </div>
+    <div>
       <v-btn color="">
         <span class="mdi mdi-account-circle"></span>
 
@@ -35,9 +38,15 @@
 import { useAuthStore } from '@/store/auth';
 import { signOut, getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+let email = {}
 const authStore = useAuthStore()
 const onlogout = () => {
   authStore.logOut()
+}
+onMounted: {
+  authStore.init()
+  email = authStore.user.email
 }
 function updateTime() {
   let currentTime = new Date();
@@ -49,7 +58,7 @@ function updateTime() {
   let mm = currentTime.getMinutes();
   let n = currentTime.toLocaleDateString()
   let fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`
-  // document.getElementById("date").innerHTML = fullTime
+  document.getElementById("date").innerHTML = fullTime
 }
 
 // const router = useRouter()

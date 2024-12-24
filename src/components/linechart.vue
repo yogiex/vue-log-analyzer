@@ -1,7 +1,9 @@
 <template>
-  <div class="" style="height: 40vh;">
-    <Line :data="chartData" :options="chartOptions" />
-  </div>
+  <v-card variant="tonal" class="text-center">
+    <div class="" style="height: 40vh;">
+      <Line :data="chartData" :options="chartOptions" />
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -36,7 +38,7 @@ export default {
       datasets: [
         {
           label: 'Timeline',
-          backgroundColor: '#f87979',
+          backgroundColor: '#4C9AFF',
           data: [Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100), Math.ceil(Math.random() * 100)]
         }
       ]

@@ -1,7 +1,10 @@
 <template>
-  <div class="" style="height: 40vh;">
-    <Doughnut :data="chartData" :options="chartOptions" />
-  </div>
+  <v-card variant="tonal" class="">
+    <div class="" style="height: 40vh;">
+      <Doughnut class="pa-md-1 mx-lg-auto" :data="chartData" :options="chartOptions" />
+
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -22,7 +25,7 @@ export default {
         labels: ['Low', 'Critical'],
         datasets: [
           {
-            backgroundColor: ['#41B883', '#DD1B16'],
+            backgroundColor: ['#4C9AFF', '#FF4C4C'],
             data: [Math.ceil(Math.random() * 1000000), Math.ceil(Math.random() * 1000000)]
           }
         ]

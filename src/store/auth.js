@@ -18,11 +18,15 @@ export const useAuthStore = defineStore("authStore", () => {
 
       if (userDetails) {
         const uid = userDetails.uid;
-        user.value = { email: userDetails.email, uid };
+
+        user.value = { email: userDetails.email, uid, userDetails };
         console.log(user);
-        router.push("/dashboard");
+        // router.push("/dashboard");
       } else {
         userDetails.value = {};
+      }
+      if (!auth) {
+        router.push("/login");
       }
     });
   };
