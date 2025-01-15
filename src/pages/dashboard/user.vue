@@ -61,13 +61,15 @@ export default {
     }
   },
   beforeMount() {
-    console.log("tes")
     axios.get(`http://localhost:3000/big_frame.json`).then(val => {
       this.dataPeserta = val.data
       console.log(dataPeserta)
-      // console.log(this.dataPeserta);
-      // console.log(val.data)
     });
+    // 
+    // axios.get(`http://localhost:3000/big_frame.json`).then(val => {
+    //   this.dataPeserta = val.data
+    //   console.log(dataPeserta)
+    // });
     return { dataPeserta }
   },
 }

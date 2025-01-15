@@ -1,6 +1,6 @@
 <template>
-  <!-- <v-navigation-drawer image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" permanent theme="dark"> -->
-  <v-navigation-drawer permanent="" theme="" color="primary">
+  <v-navigation-drawer image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" permanent theme="dark">
+  <!-- <v-navigation-drawer permanent="" theme="" color="pri  mary"> -->
     <v-list :lines="false" density="compact" nav>
       <v-list-item v-for="(item, i) in items" :key="i" :value="item" :to=item.url>
         <template v-slot:prepend>
@@ -19,8 +19,8 @@ export default {
     items: [
       { text: 'Home', icon: 'mdi-home', url: '/dashboard' },
       { text: 'Users', icon: 'mdi-account-multiple', url: '/dashboard/user' },
-      { text: 'Courses', icon: 'mdi-book-account', url: '/' },
-      { text: 'Activity', icon: 'mdi-timeline', url: '/' },
+      { text: 'Courses', icon: 'mdi-book-account', url: '#' },
+      { text: 'Activity', icon: 'mdi-timeline', url: '#' },
       { text: 'Alerts', icon: 'mdi-bell-alert', url: '/dashboard/alerts' },
       { text: 'Findings', icon: 'mdi-magnify-expand', url: '/dashboard/findings' },
       { text: 'Backup Data', icon: 'mdi-cloud-download', url: '/dashboard/backup' },
