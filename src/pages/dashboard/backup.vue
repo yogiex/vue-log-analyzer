@@ -39,7 +39,8 @@ export default {
   components: { NavbarLayout, SidebarLayout },
   methods: {
     async backup() {
-      const response = await axios.post(`${urlEndpoint}/dump`)
+      // const response = await axios.post(`${urlEndpoint}/dump`)
+      const response = await axios.post(`http://180.250.135.11:8443/dump`)
       console.log(urlEndpoint)
       console.log(response)
       alert(response.data)
