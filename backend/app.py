@@ -430,7 +430,7 @@ def predict(df_data, session):
     features = df_data[['listening_diff_time_minute', 'listening_completion_ratio', 'listening_score']]
 
     # Fitting the Isolation Forest
-    iso_forest_listening = joblib.load('models\Listening_iso_forest_model.pkl')
+    iso_forest_listening = joblib.load('./models/Listening_iso_forest_model.pkl')
     df_data['anomaly_score_iso'] = iso_forest_listening.fit_predict(features)
 
   elif session == 'reading':
@@ -447,7 +447,7 @@ def predict(df_data, session):
     features = df_data[['reading_diff_time_minute', 'reading_completion_ratio', 'reading_score']]
 
     # Fitting the Isolation Forest
-    iso_forest_reading = joblib.load('models\Reading_iso_forest_model.pkl')
+    iso_forest_reading = joblib.load('./models/Reading_iso_forest_model.pkl')
     df_data['anomaly_score_iso'] = iso_forest_reading.fit_predict(features)
 
   elif session == 'grammar':
@@ -464,7 +464,7 @@ def predict(df_data, session):
     features = df_data[['grammar_diff_time_minute', 'grammar_completion_ratio', 'grammar_score']]
 
     # Fitting the Isolation Forest
-    iso_forest_grammar = joblib.load('models\Grammar_iso_forest_model.pkl')
+    iso_forest_grammar = joblib.load('./models/Grammar_iso_forest_model.pkl')
     df_data['anomaly_score_iso'] = iso_forest_grammar.fit_predict(features)
 
 def add_pred_value(df_data, session):
