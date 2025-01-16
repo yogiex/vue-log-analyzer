@@ -33,14 +33,14 @@
 import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
-let urlEndpoint = import.meta.env.urlFlask
+let urlEndpoint = import.meta.env.URL_FLASK_API
 let dataFiles = []
 export default {
   components: { NavbarLayout, SidebarLayout },
   methods: {
     async backup() {
-      // const response = await axios.post(`${urlEndpoint}/dump`)
-      const response = await axios.post(`http://180.250.135.11:8443/dump`)
+      const response = await axios.post(`${urlEndpoint}/dump`)
+      // const response = await axios.post(`http://180.250.135.11:8443/dump`)
       console.log(urlEndpoint)
       console.log(response)
       alert(response.data)

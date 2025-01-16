@@ -1,4 +1,8 @@
 #!/bin/bash
+set -a
+source "$(dirname "$0")/.env"
+set +a
+
 min=$(date +%Y-%m-%d-%T)
 fullpath=/var/lib/mysql-files/$min
 
@@ -10,4 +14,4 @@ mkdir $fullpath
 mv /var/lib/mysql-files/*.csv $fullpath 
 echo $fullpath
 sleep 5
-sshpass -p rsync -a --remove-source-files -e 'ssh -p 224' /var/lib/mysql-files/$min linux@:~/backup-sql
+sshpass -p "$PASSWORD" rsync -a --remove-source-files -e "ssh -p $PORT " /var/lib/mysql-files/$min "$REMOTE_USER"@"$REMOTE_HOST:~/backup-sql

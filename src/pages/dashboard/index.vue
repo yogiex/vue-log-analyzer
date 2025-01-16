@@ -114,7 +114,7 @@ import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
 import axios from 'axios';
 
-let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
+let url = import.meta.env.URL_FLASK_API
 const auth = getAuth();
 let datas = []
 const authStore = useAuthStore

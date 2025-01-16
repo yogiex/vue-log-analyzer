@@ -28,7 +28,7 @@ import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
 import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router'
-let url = `${import.meta.env.VITE_APP_URL_ENDPOINT}`
+let url = import.meta.env.URL_FLASK_API
 let dataPeserta = []
 export default {
   components: { NavbarLayout, SidebarLayout },
@@ -61,7 +61,8 @@ export default {
     }
   },
   beforeMount() {
-    axios.get(`http://localhost:3000/big_frame.json`).then(val => {
+
+    axios.get(``).then(val => {
       this.dataPeserta = val.data
       console.log(dataPeserta)
     });
