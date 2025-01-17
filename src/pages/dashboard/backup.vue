@@ -16,10 +16,8 @@
         </template>
         <v-data-table :headers="headers" :items="dataFiles" :search="search">
           <template v-slot:item.actions="{ item }">
-            <a :href="'/dashboard/findings/' + item.id">
-              <v-icon class="me-2" size="small">
-                mdi-cloud-print
-              </v-icon>
+            <a :href="'/dashboard/downloads/' + item.title">
+              <v-icon>mdi-cloud-print</v-icon>
             </a>
           </template>
         </v-data-table>
@@ -39,8 +37,9 @@ export default {
   components: { NavbarLayout, SidebarLayout },
   methods: {
     async backup() {
-      const response = await axios.post(`${urlEndpoint}/dump`)
-      // const response = await axios.post(`http://180.250.135.11:8443/dump`)
+      console.log(import.meta.env)
+      // const response = await axios.post(`${urlEndpoint}/dump`)
+      const response = await axios.post(`http://180.250.135.11:8443/dump`)
       console.log(urlEndpoint)
       console.log(response)
       alert(response.data)
@@ -52,30 +51,32 @@ export default {
     return {
       search: '',
       headers: [
-        { key: 'id', title: 'ID ' },
+        { key: 'title', title: 'Title ' },
         { key: 'url', title: 'Url' },
         { key: 'actions', title: 'Actions' },
       ],
       dataFiles: [],
+      downloadLink: []
     }
   },
-  // async mounted() {
-  // axios.get(`${urlEndpoint}/directory`)
-  //     .then(val => {
-  //         val.data.map(v => this.dataFiles.push(v))
-  //         this.dataFiles = val.data
-  //         console.log(val)
-  //         console.log(this.dataFiles)
-  //     })
+  async mounted() {
+  },
+  async beforeMount() {
+    // axios.get(`${urlEndpoint}/directory`)
+    //   .then(val => {
+    //       val.data.map(v => this.dataFiles.push(v))
+    //       this.dataFiles = val.data
+    //       console.log(val)
+    //       console.log(this.dataFiles)
+    //   })
   // const response = await axios.get(`${urlEndpoint}/directory`)
-  // console.log(response)
-  // console.log(`${urlEndpoint}/directory`)
-  // }
-  beforeMount() {
-    axios.get('http://localhost:3000/mockup-files.json').then(val => {
-      console.log(val.data)
-      this.dataFiles = val.data
-    })
+  const response = await axios.get('http://180.250.135.11:8443/directory')
+  // response
+  this.dataFiles = response.data
+  console.log(response.data)
+  console.log(`${urlEndpoint}/directory`)
+
+    
   }
 }
 </script>
