@@ -1,6 +1,6 @@
 # app.py (Flask program)
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 from datetime import datetime, timedelta
 import pandas as pd
 import urllib.parse
@@ -1020,8 +1020,8 @@ def show_detail_peserta():
 
 @app.route('/dump', methods=['POST'])
 def dump():
-    os.system('./bash/export-sql.sh')
-
+    #os.system('./bash/export-sql.sh')
+    os.system('ssh -i /home/linux/.ssh/vm-a -p224 mirage@180.250.135.10 "/home/mirage/tes-dump-sql/bash/export-sql.sh" ')
     return ("berhasil")
 
 @app.route('/backupfiles', methods=['GET'])
@@ -1059,7 +1059,7 @@ def list_backups(subdir):
             files.append({
                 "title": entry,
                 "fullpath": os.path.join(full_path, entry),
-                "url": request.host_url + 'directory/' + subdir + '/' + entry
+                "url": request.host_url + 'download/' + os.path.join(subdir, entry)
             })
         elif os.path.isdir(entry_path):
             # For directories, allow recursion
@@ -1070,7 +1070,20 @@ def list_backups(subdir):
             })
     
     return jsonify(files)
+@app.route('/download/<path:filename>')
+def download_file(filename):
+    # Build the full path to the file
+    file_path = os.path.join(BASE_DIR, filename)
 
+    # Normalize the path to prevent directory traversal
+    file_path = os.path.normpath(file_path)
+
+    # Check if the file exists and is within the base directory
+    if not os.path.exists(file_path) or not os.path.isfile(file_path) or not file_path.startswith(os.path.normpath(BASE_DIR)):
+        return jsonify({"error": "File not found"}), 404
+
+    # Send the file for download
+    return send_file(file_path, as_attachment=True)
 # Route to user peserta
 # @app.route('/clients')
 # def show_peserta():
