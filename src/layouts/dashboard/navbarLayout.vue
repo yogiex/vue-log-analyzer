@@ -39,63 +39,40 @@ import { useAuthStore } from '@/store/auth';
 import { signOut, getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
-let email = {}
+const email = ref(null); // Reactive variable for email
 const authStore = useAuthStore()
 const onlogout = () => {
   authStore.logOut()
 }
 onMounted: {
-  authStore.init()
-  email = authStore.user.email
+  const auth = getAuth();
+  onAuthStateChanged(auth, (userDetails) => {
+    if (userDetails && userDetails.email) {
+      email.value = userDetails.email; // Set email if user is valid
+      console.log(`User is logged in as: ${email.value}`);
+    } else {
+      console.warn('No valid user detected. Redirecting to login.');
+      router.push('/login'); // Redirect to login if no user is found
+    }
+  });
 }
 function updateTime() {
-  let currentTime = new Date();
-  let m = currentTime.getMonth();
-  let d = currentTime.getDay()
-  let s = currentTime.getSeconds();
-  let y = currentTime.getFullYear();
-  let h = currentTime.getHours();
-  let mm = currentTime.getMinutes();
-  let n = currentTime.toLocaleDateString()
-  let fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`
-  document.getElementById("date").innerHTML = fullTime
+  const currentTime = new Date();
+  const y = currentTime.getFullYear();
+  const m = currentTime.getMonth() + 1;
+  const d = currentTime.getDate();
+  const h = currentTime.getHours().toString().padStart(2, '0');
+  const mm = currentTime.getMinutes().toString().padStart(2, '0');
+  const s = currentTime.getSeconds().toString().padStart(2, '0');
+  const fullTime = `${y}/${m}/${d} ${h}:${mm}:${s}`;
+  const dateElement = document.getElementById("date");
+  if (dateElement) {
+    dateElement.innerHTML = fullTime;
+  }
 }
 
-// const router = useRouter()
-// const auth = getAuth()
-// console.log(auth, auth.currentUser, auth.currentUser.email)
-// const email = auth.currentUser.email
+setInterval(updateTime, 1000);
 
-// export default {
-//   methods() {
-//     const logout = () => {
-//       const auth = getAuth()
-//       signOut(auth)
-//         .then(() => {
-//           router.push('/login')
-//         }).catch((error) => {
-//           console.log(error)
-//         })
-//     }
-//   },
-//   props: ['emailUser'],
-//   data() {
-//     return {
-//       isAuthenticated: false,
-//       email: null,
-//     }
-//   }
-//   , mounted() {
-//     onAuthStateChanged(auth, (user) => {
-//       if (this.email == null) {
-//         this.isAuthenticated = true;
-//       } else {
-//         router.push("/login"); // Redirect jika user tidak login
-//       }
-//     });
-//   }
-// }
-setInterval(updateTime, 1000); // Run updateTime() every second
 </script>
 
 <style>
