@@ -1280,7 +1280,7 @@ def sync_attempts():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/get/logs', methods=['GET'])
-def fetch_logs():
+def get_logs():
     try:
         # Get time range from request
         start_time = request.args.get('start_time', type=int)
@@ -1345,22 +1345,106 @@ def fetch_logs():
         ]
 
         return jsonify(logs), 200  # Return the logs array directly
-# Route to user peserta
-# @app.route('/clients')
-# def show_peserta():
-#     waktu, shift = get_time_shift()
-#     get_data(waktu, shift)
-#     session, df_data = create_dataframe()
-#     getPeserta(df_data)
-#     predict(df_data, session)
-#     add_pred_value(df_data)
-#     datas = {
-#         peserta: getPeserta
-#     }   
-#     return jsonify(datas)
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# Count Directory
+def count_directories(path):
+    """Count the number of directories in the given path."""
+    try:
+        return len([entry for entry in os.listdir(path) if os.path.isdir(os.path.join(path, entry))])
+    except FileNotFoundError:
+        return 0  # Return 0 if the directory does not exist
+
+@app.route('/api/summary', methods=['GET'])
+def get_summary():
+    """API endpoint to get the summary of users and mdl_standard_logs."""
+    try:
+        # Connect to the database
+        connection = pymysql.connect(
+	    host = os.getenv('MYSQL_HOST_VM_A'),      
+            user = os.getenv('MYSQL_USER_VM_A'),    
+            password = os.getenv('MYSQL_PASS_VM_A'),   
+            database = os.getenv('MYSQL_DB_VM_A'),
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            # Query for count of users
+            cursor.execute("SELECT COUNT(*) AS count FROM mdl_user;")
+            count_users = cursor.fetchone()['count']
+
+            # Query for count of mdl_standard_logs
+            cursor.execute("SELECT COUNT(*) AS count FROM mdl_logstore_standard_log;")
+            count_mdl_standard_logs = cursor.fetchone()['count']
+            # Query for count of total steps
+            # Query for total_count_step
+            cursor.execute("""
+                SELECT COUNT(*) AS total_count_step
+                FROM (
+                    SELECT
+                        qa.id AS attempt_id,
+                        u.id AS user_id,
+                        u.firstname,
+                        u.lastname,
+                        c.fullname AS course_name,
+                        q.name AS quiz_name,
+                        qa.uniqueid,
+                        qa.timestart,
+                        qa.timefinish,
+                        qa.sumgrades AS score,
+                        qat.id AS question_attempt_id,
+                        qas.id AS step_id,
+                        qas.state AS step_state,
+                        qas.timecreated AS step_start_time,
+                        next_step.timecreated AS next_step_time,
+                        next_step.timecreated - qas.timecreated AS time_spent_on_question
+                    FROM
+                        mdl_quiz_attempts qa
+                    JOIN
+                        mdl_user u ON qa.userid = u.id
+                    JOIN
+                        mdl_quiz q ON qa.quiz = q.id
+                    JOIN
+                        mdl_course c ON q.course = c.id
+                    JOIN
+                        mdl_course_modules cm ON q.id = cm.instance 
+                        AND cm.module = (SELECT id FROM mdl_modules WHERE name = 'quiz')
+                    JOIN
+                        mdl_question_attempts qat ON qa.uniqueid = qat.questionusageid
+                    JOIN
+                        mdl_question_attempt_steps qas ON qat.id = qas.questionattemptid
+                    LEFT JOIN
+                        mdl_question_attempt_steps next_step ON qas.questionattemptid = next_step.questionattemptid 
+                        AND qas.sequencenumber = next_step.sequencenumber - 1
+                    WHERE
+                        c.id = 4
+                ) AS subquery;
+            """)
+            total_count_step = cursor.fetchone()['total_count_step']
+        # Close the connection after executing the queries
+        connection.close()
+        # Count directories in the base directory
+        directory_count = count_directories(BASE_DIR)
+
+        # Return the summary as JSON
+        return jsonify({
+            "count_users": count_users,
+            "count_mdl_standard_logs": count_mdl_standard_logs,
+            "count_total_steps": total_count_step,
+            "count_directory": directory_count
+        })
+
+    except pymysql.MySQLError as e:
+        # Handle database connection or query errors
+        return jsonify({"error": f"Database error: {e}"}), 500
+    except Exception as e:
+        # Handle other errors
+        return jsonify({"error": str(e)}), 500
 if __name__ == '__main__':
-    # main()
+    # Start Flask in a separate thread
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.start()
 
@@ -1375,6 +1459,5 @@ if __name__ == '__main__':
     # Run the bot's polling in the main thread
     asyncio.run(application.run_polling())
 
-    # Wait for the Flask thread to complete (this will not actually happen in normal execution)
+    # Wait for the Flask thread to complete
     flask_thread.join()
-        
