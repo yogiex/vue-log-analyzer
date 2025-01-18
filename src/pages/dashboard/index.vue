@@ -2,47 +2,32 @@
   <v-layout class="rounded rounded-md" style="min-height: 100vh;">
     <NavbarLayout />
     <SidebarLayout />
-
-
+    <!-- main section -->
     <v-main>
-      <!-- <v-card-text>
-        <v-text-field :loading="loading" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
-          single-line hide-details @click:append-inner="onClick"></v-text-field>
-      </v-card-text> -->
       <v-container>
         <v-row class="mb-6">
           <v-col>
             <v-card class="mx-auto" max-width="344" hover color="primary">
               <v-card-item>
                 <v-card-title>
-                  Record Count
+                  Record Count Step Query
                 </v-card-title>
-                <v-card-subtitle>
-
-                </v-card-subtitle>
+                <v-card-title>
+                  <h1>{{ datas.count_total_steps }}</h1>
+                </v-card-title>
               </v-card-item>
-
-              <v-card-text>
-                <h1>{{ datas.recordCount }}</h1>
-              </v-card-text>
             </v-card>
           </v-col>
           <v-col>
             <v-card class="mx-auto" max-width="344" hover color="primary">
               <v-card-item>
                 <v-card-title>
-                  Total Cases
+                  Total Logs
                 </v-card-title>
-                <v-card-subtitle>
-
-                </v-card-subtitle>
+                <v-card-title>
+                  <h1>{{ datas.count_directory }}</h1>
+                </v-card-title>
               </v-card-item>
-
-              <v-card-text>
-
-                <h1>{{ datas.totalCase }}</h1>
-              </v-card-text>
-
             </v-card>
           </v-col>
           <v-col>
@@ -51,30 +36,25 @@
                 <v-card-title>
                   Total Users
                 </v-card-title>
-                <v-card-subtitle>
-                  <!-- tes -->
-                </v-card-subtitle>
-              </v-card-item>
 
-              <v-card-text>
-                <h1>{{ datas.totalUser }}</h1>
-              </v-card-text>
+
+              <v-card-title>
+                <h1>{{ datas.count_users }}</h1>
+              </v-card-title>
+            </v-card-item>
             </v-card>
           </v-col>
           <v-col>
             <v-card class="mx-auto" max-width="344" hover color="primary">
               <v-card-item>
                 <v-card-title>
-                  Total Request
+                  Total Standar Logs
                 </v-card-title>
-                <v-card-subtitle>
-
-                </v-card-subtitle>
-              </v-card-item>
-
-              <v-card-text>
-                <h1>{{ datas.totalRequest }}</h1>
-              </v-card-text>
+              
+              <v-card-title>
+                <h1>{{ datas.count_mdl_standard_logs }}</h1>
+              </v-card-title>
+            </v-card-item>
             </v-card>
           </v-col>
         </v-row>
@@ -101,6 +81,7 @@
         </v-row>
       </v-container>
     </v-main>
+    <!-- end of main section -->
   </v-layout>
   <router-view></router-view>
 </template>
@@ -114,9 +95,9 @@ import doghnut from '@/components/doghnut.vue';
 import linechart from '@/components/linechart.vue';
 import axios from 'axios';
 
-let url = import.meta.env.URL_FLASK_API
+let url = import.meta.env.VITE_URL_FLASK_API
 const auth = getAuth();
-let datas = []
+
 const authStore = useAuthStore
 export default {
   components: { SidebarLayout, NavbarLayout, doghnut, linechart },
@@ -128,16 +109,11 @@ export default {
       isAuthenticated: false,
     }
   },
-  beforeMount() {
+  async beforeMount() {
     authStore().init()
-    console.log("tes")
-    axios.get(`http://localhost:3000/allsummary.json`).then(val => {
-      // console.log(datas)
-      // console.log(val.data)
-      this.datas = val.data
-      console.log(datas)
-    });
-    return { datas }
+    const response = await axios.get(`${url}/api/summary`)
+    this.datas = response.data
+    console.table(response.data)
   },
   methods: {
     onClick() {
@@ -149,23 +125,11 @@ export default {
     },
   },
 
-  // mounted() {
-  // axios.get(`${url}/get_summary`)
-  //   .then(val => {
-  //     val.data.map(v => this.datas.push(v))
-  //     this.datas = val.data[1]
-  //     console.log(this.datas)
-  //   })
-  // axios.get(`http://localhost:3000/allsummary.json`)
-  //   .then(val => {
-  //     console.log(val.data)
-  //     this.datas.push(val.data)
-  //   })
-  // const response = fetch(`http://localhost:3000/allsummary.json`)
-  // response.then(val => {
-  //   console.log(val)
-  // })
-  // }
+  async mounted() {
+    const response = await axios.get(`${url}/api/summary`)
+    this.datas = response.data
+    console.table(response.data)
+  }
 }
 </script>
 
