@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("authStore", () => {
   const auth = getAuth();
   const user = ref({});
   const router = useRouter();
+
   const init = () => {
     onAuthStateChanged(auth, (userDetails) => {
       console.log("auth state changed");
@@ -18,18 +19,18 @@ export const useAuthStore = defineStore("authStore", () => {
 
       if (userDetails) {
         const uid = userDetails.uid;
-
         user.value = { email: userDetails.email, uid, userDetails };
         console.log(user);
-        // router.push("/dashboard");
       } else {
-        userDetails.value = {};
+        user.value = {}; // Reset the user to an empty object when not authenticated
       }
-      if (!auth) {
+
+      if (!userDetails) {
         router.push("/login");
       }
     });
   };
+
   const loginUser = (credentials) => {
     signInWithEmailAndPassword(auth, credentials.email, credentials.password)
       .then((userCredentials) => {
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore("authStore", () => {
         console.log(error.message);
       });
   };
+
   const logOut = () => {
     signOut(auth)
       .then(() => {
@@ -51,5 +53,6 @@ export const useAuthStore = defineStore("authStore", () => {
         console.log(error.message);
       });
   };
+
   return { loginUser, logOut, init, user };
 });
