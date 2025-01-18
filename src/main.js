@@ -24,17 +24,12 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBRrGPqQrvC4o2Ij3mF_jvmOO30l9xvlIU",
-
-  authDomain: "vue-auth-analyzer.firebaseapp.com",
-
-  projectId: "vue-auth-analyzer",
-
-  storageBucket: "vue-auth-analyzer.appspot.com",
-
-  messagingSenderId: "980989288707",
-
-  appId: "1:980989288707:web:373b7a8dd2bc2beb3d4936",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingId: import.meta.env.VITE_MESSAGING_ID,
+  appId: import.meta.env.VITE_APP_ID
 };
 // Initialize Firebase
 
