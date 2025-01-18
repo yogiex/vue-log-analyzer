@@ -28,7 +28,7 @@ from hypercorn.config import Config
 import joblib
 import signal
 import sys
-
+import pymysql
 load_dotenv()
 
 app = Flask(__name__)
@@ -324,10 +324,14 @@ def get_sql_data():
         else:
             selected_test_time = test_times_unix[2]
 
-        query = """ 
+        #query =
+        #    SELECT id_peserta, firstname, lastname, quiz_name, unique_id, timestart, timefinish, score 
+        #    FROM backup_attempt
+        #    WHERE timestart >= %s AND timestart < %s;
+        #
+        query = """
             SELECT id_peserta, firstname, lastname, quiz_name, unique_id, timestart, timefinish, score 
-            FROM backup_attempt
-            WHERE timestart >= %s AND timestart < %s;
+            FROM backup_attempt;
             """
 
         # selected_test_time = 1724842800
@@ -335,7 +339,7 @@ def get_sql_data():
         next_test_time = selected_test_time + 4 * 60 * 60  # Add 4 hours to cover the entire time range
 
         cursor.execute("""SELECT id_peserta, firstname, lastname, quiz_name, unique_id, 
-                       timestart, timefinish, score FROM backup_attempt WHERE quiz_name='Grammar Pre-Exam'""")
+                       timestart, timefinish, score FROM backup_attempt""")
 
         # cursor.execute(query, (selected_test_time, next_test_time))
 
@@ -491,15 +495,15 @@ def add_pred_value(df_data, session):
             converted_treshold = (treshold_nilai / nilai_max) * 100
             if converted_nilai < 40:
                 p.status = 1
-            
+
             time_str = p.timetaken
             hours, minutes, seconds = map(int, time_str.split(':'))
             duration = timedelta(hours=hours, minutes=minutes, seconds=seconds)
             total_seconds = duration.total_seconds()
 
             if total_seconds < treshold_time:
-                if p.score > converted_treshold:
-                    p.status = -1
+             if p.score > converted_treshold:
+               p.status = -1
 
 def doConcurrentPredict(df_data, session):
     batch_analysis_res = []
@@ -1084,6 +1088,263 @@ def download_file(filename):
 
     # Send the file for download
     return send_file(file_path, as_attachment=True)
+
+# Database connection details for VM-A (Moodle database)
+DB_CONFIG_VM_A = {
+    'host': os.getenv('MYSQL_HOST_VM_A'),       # Replace with the IP of VM-A
+    'user': os.getenv('MYSQL_USER_VM_A'),    # Replace with your Moodle database user
+    'password': os.getenv('MYSQL_PASS_VM_A'),   # Replace with your Moodle database password
+    'database': os.getenv('MYSQL_DB_VM_A')   # Replace with your Moodle database name
+}
+
+@app.route('/monitor/user-steps', methods=['GET'])
+def monitor_user_steps():
+    """
+    Endpoint to fetch user step activity data from the Moodle database.
+    Query parameters:
+      - course_id: ID of the course (default: 4)
+      - limit: Number of records to fetch (default: 100)
+    """
+    try:
+        # Get query parameters
+        course_id = request.args.get('course_id', type=int, default=4)
+        limit = request.args.get('limit', type=int, default=100)
+
+        # Connect to the database on VM-A
+        connection = pymysql.connect(**DB_CONFIG_VM_A)
+
+        # SQL query to fetch step activity
+        query = f"""
+        SELECT
+            qa.id AS attempt_id,
+            u.id AS user_id,
+            u.firstname,
+            u.lastname,
+            c.fullname AS course_name,
+            q.name AS quiz_name,
+            qa.uniqueid,
+            qa.timestart,
+            qa.timefinish,
+            qa.sumgrades AS score,
+            qat.id AS question_attempt_id,
+            qas.id AS step_id,
+            qas.state AS step_state,
+            qas.timecreated AS step_start_time,
+            next_step.timecreated AS next_step_time,
+            next_step.timecreated - qas.timecreated AS time_spent_on_question
+        FROM
+            mdl_quiz_attempts qa
+        JOIN
+            mdl_user u ON qa.userid = u.id
+        JOIN
+            mdl_quiz q ON qa.quiz = q.id
+        JOIN
+            mdl_course c ON q.course = c.id
+        JOIN
+            mdl_course_modules cm ON q.id = cm.instance AND cm.module = (SELECT id FROM mdl_modules WHERE name = 'quiz')
+        JOIN
+            mdl_question_attempts qat ON qa.uniqueid = qat.questionusageid
+        JOIN
+            mdl_question_attempt_steps qas ON qat.id = qas.questionattemptid
+        LEFT JOIN
+            mdl_question_attempt_steps next_step ON qas.questionattemptid = next_step.questionattemptid AND qas.sequencenumber = next_step.sequencenumber - 1
+        WHERE
+            c.id = {course_id}
+        ORDER BY
+            qa.timefinish DESC, qat.id, qas.timecreated
+        LIMIT {limit};
+        """
+
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(query)
+            results = cursor.fetchall()
+
+        connection.close()
+
+        # Return the fetched data as JSON
+        return jsonify({'status': 'success', 'data': results})
+
+    except Exception as e:
+        # Handle errors and return a JSON response
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+def fetch_data_from_vm_a():
+    """
+    Fetch data from VM-A using the SELECT query.
+    Returns:
+        List of rows fetched from the database.
+    """
+    SELECT_QUERY = """
+    SELECT 
+        qa.id AS attempt_id,
+        u.id AS id_peserta,
+        u.firstname,
+        u.lastname,
+        c.fullname AS course_name,
+        q.name AS quiz_name,
+        qa.uniqueid AS unique_id,
+        qa.layout,
+        qa.timestart,
+        qa.timefinish,
+        qa.sumgrades AS score
+    FROM
+        mdl_quiz_attempts qa
+    JOIN
+        mdl_user u ON qa.userid = u.id
+    JOIN
+        mdl_quiz q ON qa.quiz = q.id
+    JOIN
+        mdl_course c ON q.course = c.id
+    JOIN
+        mdl_course_modules cm ON q.id = cm.instance AND cm.module = (SELECT id FROM mdl_modules WHERE name = 'quiz')       
+    WHERE
+        qa.state = 'finished'
+    AND (cm.id = 9 OR cm.id = 10 OR cm.id = 11)
+    ORDER BY
+        qa.timefinish DESC;
+    """
+    try:
+        connection = pymysql.connect(**DB_CONFIG_VM_A)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(SELECT_QUERY)
+            results = cursor.fetchall()
+        connection.close()
+        return results
+    except Exception as e:
+        raise Exception(f"Error fetching data from VM-A: {e}")
+
+def insert_data_into_vm_b(data):
+    """
+    Insert data into VM-B using the INSERT query.
+    Args:
+        data: List of rows to insert into the backup_attempt table.
+    """
+    INSERT_QUERY = """
+    INSERT INTO backup_attempt (
+        attempt_id,
+        id_peserta,
+        firstname,
+        lastname,
+        course_name,
+        quiz_name,
+        unique_id,
+        layout,
+        timestart,
+        timefinish,
+        score
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    """
+    try:
+        connection = pymysql.connect(**db_config_source)
+        with connection.cursor() as cursor:
+            cursor.executemany(INSERT_QUERY, data)
+            connection.commit()
+        connection.close()
+    except Exception as e:
+        raise Exception(f"Error inserting data into VM-B: {e}")
+
+@app.route('/api/sync-attempts', methods=['POST'])
+def sync_attempts():
+    """
+    API endpoint to fetch data from VM-A and insert into VM-B.
+    """
+    try:
+        # Step 1: Fetch data from VM-A
+        fetched_data = fetch_data_from_vm_a()
+
+        # Step 2: Format data for insertion into VM-B
+        formatted_data = [
+            (
+                row['attempt_id'],
+                row['id_peserta'],
+                row['firstname'],
+                row['lastname'],
+                row['course_name'],
+                row['quiz_name'],
+                row['unique_id'],
+                row['layout'],
+                row['timestart'],
+                row['timefinish'],
+                row['score'],
+            )
+            for row in fetched_data
+        ]
+
+        # Step 3: Insert data into VM-B
+        if formatted_data:
+            insert_data_into_vm_b(formatted_data)
+
+        return jsonify({"status": "success", "message": "Data synchronized successfully.", "rows_synced": len(formatted_data)})
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/get/logs', methods=['GET'])
+def fetch_logs():
+    try:
+        # Get time range from request
+        start_time = request.args.get('start_time', type=int)
+        end_time = request.args.get('end_time', type=int)
+
+        if not start_time or not end_time:
+            return jsonify({"error": "Both start_time and end_time are required"}), 400
+
+        # SQL query
+        query = f"""
+        SELECT
+            sl.id AS log_id,
+            u.id AS user_id,
+            u.firstname AS user_firstname,
+            u.lastname AS user_lastname,
+            c.fullname AS course_name,
+            sl.component,
+            sl.action,
+            sl.target,
+            sl.ip,
+            q.id AS quiz_id,
+            q.name AS quiz_name,
+            sl.timecreated
+        FROM
+            mdl_logstore_standard_log sl
+        JOIN
+            mdl_user u ON sl.userid = u.id
+        JOIN
+            mdl_course c ON sl.courseid = c.id
+        LEFT JOIN
+            mdl_quiz q ON sl.objecttable = 'quiz' AND sl.objectid = q.id
+        WHERE
+            c.id = 4
+            AND sl.timecreated BETWEEN {start_time} AND {end_time}
+        ORDER BY
+            sl.id DESC;
+        """
+
+        # Connect to the database
+        connection = pymysql.connect(**DB_CONFIG_VM_A)
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            results = cursor.fetchall()
+
+        # Process and return results
+        logs = [
+            {
+                "log_id": row[0],
+                "user_id": row[1],
+                "user_firstname": row[2],
+                "user_lastname": row[3],
+                "course_name": row[4],
+                "component": row[5],
+                "action": row[6],
+                "target": row[7],
+                "ip": row[8],
+                "quiz_id": row[9],
+                "quiz_name": row[10],
+                "timecreated": row[11],
+            }
+            for row in results
+        ]
+
+        return jsonify(logs), 200  # Return the logs array directly
 # Route to user peserta
 # @app.route('/clients')
 # def show_peserta():
