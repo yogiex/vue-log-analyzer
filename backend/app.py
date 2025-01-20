@@ -99,7 +99,7 @@ class peserta:
 proctor_id = []
 
 # Telegram bot setup
-TOKEN = os.getenv("token")
+TOKEN = os.getenv("TOKEN_BOT_TELEGRAM")
 # application = None
 
 async def help(update: Update, context: CallbackContext) -> None:
@@ -401,8 +401,8 @@ def getPeserta(df_data, session):
         daftar_peserta.append(newPeserta)
 
     # Convert 'timestart' and 'timefinish' to datetime if needed
-    df_data['timestart'] = pd.to_datetime(df_data['timestart'])
-    df_data['timefinish'] = pd.to_datetime(df_data['timefinish'])
+    df_data['timestart'] = pd.to_datetime(df_data['timestart'], unit='s')
+    df_data['timefinish'] = pd.to_datetime(df_data['timefinish'], unit='s')
 
     # Calculate time difference and convert to minutes
     df_data['diff_time'] = df_data['timefinish'] - df_data['timestart']
@@ -1168,7 +1168,7 @@ def monitor_user_steps():
         # Handle errors and return a JSON response
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-def fetch_data_from_vm_a():
+def fetch_data_from_vm_a(start_date,finish_date):
     """
     Fetch data from VM-A using the SELECT query.
     Returns:
@@ -1200,13 +1200,14 @@ def fetch_data_from_vm_a():
     WHERE
         qa.state = 'finished'
     AND (cm.id = 9 OR cm.id = 10 OR cm.id = 11)
+    AND qa.timestart between %s AND %s
     ORDER BY
         qa.timefinish DESC;
     """
     try:
         connection = pymysql.connect(**DB_CONFIG_VM_A)
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(SELECT_QUERY)
+            cursor.execute(SELECT_QUERY,(start_date,finish_date))
             results = cursor.fetchall()
         connection.close()
         return results
@@ -1249,8 +1250,13 @@ def sync_attempts():
     API endpoint to fetch data from VM-A and insert into VM-B.
     """
     try:
+        start_time = request.args.get('start_time', type=int)  
+        end_time = request.args.get('end_time', type=int)
+
+        if not start_time or not end_time:
+            return jsonify({"error": "Both start_time and end_time are required"}), 400
         # Step 1: Fetch data from VM-A
-        fetched_data = fetch_data_from_vm_a()
+        fetched_data = fetch_data_from_vm_a(start_time,end_time)
 
         # Step 2: Format data for insertion into VM-B
         formatted_data = [
