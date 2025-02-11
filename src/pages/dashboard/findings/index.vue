@@ -5,11 +5,20 @@
       <v-card flat title="User Filter">
         <v-btn class="ml-4" variant="outlined" color="primary" @click="storeDb">Findings</v-btn>
         <v-row>
-          <v-col><v-date-input class="mt-5 mx-5" label="Date input time start" v-model="startDate"
-              variant="outlined"></v-date-input></v-col>
-          <v-col><v-date-input class="mt-5 mx-5" label="Date input time end" v-model="endDate"
-              variant="outlined"></v-date-input></v-col>
+          <v-col>
+            <v-date-input class="mt-5 mx-5" label="Date input time start" v-model="startDate"
+              variant="outlined">
+            </v-date-input>
+          </v-col>
+          <v-col>
+            <v-date-input class="mt-5 mx-5" label="Date input time end" v-model="endDate"
+              variant="outlined">
+            </v-date-input>
+            
+          </v-col>
+          
         </v-row>
+        
         <!-- Progress Circular -->
         <div v-if="loading" class="text-center">
           <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
@@ -25,7 +34,7 @@
           <template v-slot:item.status="{ item }">
             <div class="">
               <v-chip :color="kasusPeserta.status == 1 ? 'red' : 'green'"
-                :text="kasusPeserta.status == 1 ? 'Terindikasi' : 'Aman'" class="text-uppercase" label
+                :text="kasusPeserta.status == 1 ? 'Dishonest' : 'Honest'" class="text-uppercase" label
                 size="small"></v-chip>
             </div>
           </template>
@@ -116,7 +125,7 @@ export default {
       if (this.startDate && this.endDate) {
         
         const startTime = Math.floor(new Date(this.startDate).getTime() / 1000);
-        const endTime = Math.floor(new Date(this.endDate).getTime() / 1000);
+        const endTime = Math.floor(new Date().getTime() / 1000);
         try {
           const response = await axios.post(`${url}/api/sync-attempts?start_time=${startTime}&end_time=${endTime}`)
           console.log(response.data)
