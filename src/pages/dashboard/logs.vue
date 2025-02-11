@@ -1,62 +1,57 @@
 <template>
-    <v-layout class="rounded rounded-md" style="min-height: 100vh;">
-        <NavbarLayout />
-        <SidebarLayout />
-        <v-main>
-            <v-container>
-                <v-card>
-                    <template v-slot:text>
-                        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line
-                            variant="outlined" hide-details>
-                        </v-text-field>
-                    </template>
-                    <v-row>
-                        <v-col><v-date-input class="mt-5 mx-5" label="Date input time start" v-model="startDate"
-                                variant="outlined"></v-date-input></v-col>
-                        <v-col><v-date-input class="mt-5 mx-5" label="Date input time end" v-model="endDate"
-                                variant="outlined"></v-date-input></v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <v-btn @click="fetchLogs" variant="tonal" class="ml-4 mb-5" color="primary">Get These
-                                Logs</v-btn>
-                        </v-col>
-                    </v-row>
-                    <!-- Progress circular -->
-                    <!-- Progress Circular -->
-                    <div v-if="loading" class="text-center">
-                        <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-                    </div>
-                    <!-- end of progress circular -->
-                    <!--  data tables-->
-                    <v-data-table :headers="headers" :items="logs" :search="search" dense>
+    <DashboardLayout>
+        <v-container>
+            <v-card>
+                <template v-slot:text>
+                    <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line
+                        variant="outlined" hide-details>
+                    </v-text-field>
+                </template>
+                <v-row>
+                    <v-col><v-date-input class="mt-5 mx-5" label="Date input time start" v-model="startDate"
+                            variant="outlined"></v-date-input></v-col>
+                    <v-col><v-date-input class="mt-5 mx-5" label="Date input time end" v-model="endDate"
+                            variant="outlined"></v-date-input></v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-btn @click="fetchLogs" variant="tonal" class="ml-4 mb-5" color="primary">Get These
+                            Logs</v-btn>
+                    </v-col>
+                </v-row>
+                <!-- Progress circular -->
+                <!-- Progress Circular -->
+                <div v-if="loading" class="text-center">
+                    <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
+                </div>
+                <!-- end of progress circular -->
+                <!--  data tables-->
+                <v-data-table :headers="headers" :items="logs" :search="search" dense>
 
-                    </v-data-table>
+                </v-data-table>
+            </v-card>
+            <!-- Error Dialog -->
+            <v-dialog v-model="dialog" width="auto">
+                <v-card max-width="400">
+                    <v-card-title class="text-h6">Error</v-card-title>
+                    <v-card-text>{{ errorMessage }}</v-card-text>
+                    <v-card-actions>
+                        <v-btn class="ms-auto" text @click="dialog = false">Ok</v-btn>
+                    </v-card-actions>
                 </v-card>
-                <!-- Error Dialog -->
-                <v-dialog v-model="dialog" width="auto">
-                    <v-card max-width="400">
-                        <v-card-title class="text-h6">Error</v-card-title>
-                        <v-card-text>{{ errorMessage }}</v-card-text>
-                        <v-card-actions>
-                            <v-btn class="ms-auto" text @click="dialog = false">Ok</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-                <!-- end of Dialog -->
-            </v-container>
-        </v-main>
-    </v-layout>
+            </v-dialog>
+            <!-- end of Dialog -->
+        </v-container>
+    </DashboardLayout>
+
 </template>
 
 <script>
 
-import dashboardLayout from '@/layouts/dashboard/dashboardLayout.vue';
-import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
-import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
+import DashboardLayout from '@/layouts/dashboard/dashboardLayout.vue';
 import axios from 'axios';
 export default {
-    components: { dashboardLayout, SidebarLayout, NavbarLayout },
+    components: {  DashboardLayout },
     data() {
         return {
             startDate: null,
