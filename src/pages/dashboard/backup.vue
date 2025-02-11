@@ -97,8 +97,8 @@ export default {
     const response = await axios.get(`${urlEndpoint}/directory`)
     // response
     this.dataFiles = response.data
-    console.log(response.data)
-    console.log(`${urlEndpoint}/directory`)
+    // console.log(response.data)
+    // console.log(`${urlEndpoint}/directory`)
 
 
   }
