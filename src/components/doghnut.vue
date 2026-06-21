@@ -1,55 +1,60 @@
 <template>
-  <v-card variant="tonal" class="">
-    <div class="" style="height: 40vh;">
-      <Doughnut class="pa-md-1 mx-lg-auto" :data="chartData" :options="chartOptions" />
-
+  <v-card variant="tonal">
+    <v-card-item>
+      <v-card-title class="text-h6">Status Distribution</v-card-title>
+      <v-card-subtitle class="text-body-2 text-medium-emphasis">Participant honesty classification</v-card-subtitle>
+    </v-card-item>
+    <div style="height: 35vh;" role="img" aria-label="Donut chart showing distribution of participant status">
+      <Doughnut :data="chartData" :options="chartOptions" />
     </div>
   </v-card>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
-import axios from 'axios';
-// eslint-disable-next-line no-unused-vars
-let url = 'http://180.250.135.11:5000'
+import { useMockChartData } from '@/composables/useMockData'
+import { COLORS } from '@/theme/colors'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
-export default {
-  components: {
-    Doughnut
-  },
-  data() {
-    return {
-      chartData: {
-        labels: ['Low', 'Critical'],
-        datasets: [
-          {
-            backgroundColor: ['#4C9AFF', '#FF4C4C'],
-            data: [Math.ceil(Math.random() * 1000000), Math.ceil(Math.random() * 1000000)]
-          }
-        ]
-      },
-      chartOptions: {
-        responsive: true
-      },
-      datas: []
-    }
-  },
-  mounted() {
-    // axios.get(`${url}/get_summary`)
-    //   .then(val => {
-    //     val.data.map(v => this.datas.push(v))
-    //     this.datas = val.data[1]
-    //     console.log(`logging di donnut ${this.datas}`)
-    //   })
-    axios.get(`http://localhost:3000/allsummary.json`)
-      .then(val => {
-        this.datas.push(val.data)
-        console.log(`logging di donnut ${this.datas}`)
-      })
-  }
 
+const mock = useMockChartData()
+
+const chartData = computed(() => ({
+  labels: mock.donutLabels,
+  datasets: [
+    {
+      backgroundColor: mock.donutColors,
+      hoverBackgroundColor: [COLORS.hover.primary, COLORS.hover.secondary],
+      data: mock.donutData,
+      borderWidth: 0,
+    }
+  ]
+}))
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: {
+        padding: 20,
+        usePointStyle: true,
+      },
+    },
+    tooltip: {
+      callbacks: {
+        label(context) {
+          const total = context.dataset.data.reduce((a, b) => a + b, 0)
+          const value = context.parsed
+          const pct = ((value / total) * 100).toFixed(1)
+          return ` ${context.label}: ${value} (${pct}%)`
+        },
+      },
+    },
+  },
 }
 </script>
 
