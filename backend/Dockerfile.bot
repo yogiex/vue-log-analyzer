@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        default-libmysqlclient-dev \
+        gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Hanya salin file yang dibutuhkan bot (jangan seluruh services)
+COPY bot.py .
+COPY config.py .
+COPY services/auth.py ./services/
+COPY services/database.py ./services/
+COPY services/threshold_manager.py ./services/
+
+CMD ["python", "bot.py"]
