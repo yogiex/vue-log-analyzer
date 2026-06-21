@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  # ============================================
+  # Frontend Vue 3 + Vuetify 3 (Production)
+  # ============================================
+  frontend:
+    build:
+      context: ./frontend  # path ke folder frontend (bisa . jika di root proyek)
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7153:80"          # akses di http://localhost:8080
+    depends_on:
+      - backend
+    networks:
+      - log-analyzer
+
+  # ============================================
+  # Backend (Flask) – contoh, sesuaikan dengan service backend Anda
+  # ============================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.flask
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    environment:
+      - MYSQL_HOST=db
+      # ... environment lain sesuai kebutuhan
+    networks:
+      - log-analyzer
+
+networks:
+  log-analyzer:
