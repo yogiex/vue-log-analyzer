@@ -1,49 +1,128 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-row>
       <v-col>
-        <v-btn variant="outlined" class="ma-4">sesi 1</v-btn>
-        <v-btn variant="outlined" class="ma-4">sesi 2</v-btn>
-        <v-btn variant="outlined" class="ma-4">sesi 3</v-btn>
+        <v-btn
+          v-for="s in sessions"
+          :key="s.key"
+          :variant="activeSession === s.key ? 'tonal' : 'outlined'"
+          :color="activeSession === s.key ? 'primary' : 'default'"
+          class="ma-2"
+          @click="activeSession = s.key"
+          aria-label="Filter by {{ s.label }}"
+        >
+          {{ s.label }}
+        </v-btn>
       </v-col>
     </v-row>
-    <v-row class="d-flex align-content-start flex-wrap">
-      <v-card v-for="(user, i) in users" :key="i" class="ma-3" :elevation="5">
-        <v-card-title>{{ user.nama }}</v-card-title>
-        <v-img :src="user.img" width="150px" height="150px" />
-        <v-card-actions>
-          <p>Status :</p>
-          <v-btn class="ml-2" :color="user.status == 'bad' ? 'error' : 'success'">{{ user.status }}</v-btn>
-          <v-btn prepend-icon="mdi-open-in-new">Details</v-btn>
+
+    <v-alert
+      v-if="error"
+      type="error"
+      variant="tonal"
+      class="mb-4"
+      title="Failed to load users"
+      text="Unable to load monitoring data."
+      closable
+      @click:close="error = false"
+    />
+
+    <v-skeleton-loader
+      v-if="loading"
+      type="card@6"
+      role="status"
+      aria-label="Loading monitoring users"
+    />
+
+    <div v-else aria-live="polite" class="d-flex align-content-start flex-wrap">
+      <v-card
+        v-for="(user, i) in filteredUsers"
+        :key="i"
+        class="ma-3"
+        :elevation="5"
+        min-width="200"
+        :aria-label="`User card: ${user.nama}`"
+      >
+        <v-card-item>
+          <template #prepend>
+            <v-icon :color="user.status === 'bad' ? 'error' : 'success'" aria-hidden="true">
+              {{ user.status === 'bad' ? 'mdi-alert-circle' : 'mdi-check-circle' }}
+            </v-icon>
+          </template>
+          <v-card-title class="text-h6">{{ user.nama }}</v-card-title>
+        </v-card-item>
+        <v-img
+          :src="user.img"
+          width="150px"
+          height="150px"
+          class="mx-auto"
+          :aria-label="`Avatar of ${user.nama}`"
+        >
+          <template #placeholder>
+            <v-icon size="48" color="medium-emphasis">mdi-account</v-icon>
+          </template>
+        </v-img>
+        <v-card-text class="text-center">
+          <v-tooltip :text="user.reason" location="bottom">
+            <template #activator="{ props }">
+              <v-chip
+                v-bind="props"
+                :color="user.status === 'bad' ? 'error' : 'success'"
+                size="small"
+                variant="tonal"
+              >
+                {{ user.status }}
+              </v-chip>
+            </template>
+          </v-tooltip>
+          <p class="text-body-2 text-medium-emphasis mt-2">{{ user.ip_address }}</p>
+          <p class="text-caption text-disabled mt-1">{{ user.reason }}</p>
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn variant="text" size="small" prepend-icon="mdi-open-in-new" aria-label="View details for {{ user.nama }}">
+            Details
+          </v-btn>
         </v-card-actions>
       </v-card>
-    </v-row>
-  </v-container>
+
+      <v-card
+        v-if="!filteredUsers.length && !loading && !error"
+        class="text-center pa-8 ma-3 w-100"
+        variant="tonal"
+      >
+        <v-icon size="48" color="medium-emphasis">mdi-account-off</v-icon>
+        <p class="text-h6 mt-2 text-medium-emphasis">No users found</p>
+        <p class="text-body-2 text-disabled">No monitoring data available for this session</p>
+      </v-card>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useMockMonitoringUsers } from '@/composables/useMockData'
 
-const users = ref([
-  { nama: 'Cameron', ip_address: '126.246.120.31', img: '/user_456141.png', status: 'good' },
-  { nama: 'Buck', ip_address: '255.162.171.92', img: '/user_456141.png', status: 'bad' },
-  { nama: 'Geovanni', ip_address: '210.97.101.185', img: '/user_456141.png', status: 'good' },
-  { nama: 'Carmel', ip_address: '219.218.21.209', img: '/user_456141.png', status: 'good' },
-  { nama: 'Buddy', ip_address: '106.113.177.207', img: '/user_456141.png', status: 'good' },
-  { nama: 'Marge', ip_address: '48.44.158.104', img: '/user_456141.png', status: 'good' },
-  { nama: 'Max', ip_address: '219.44.100.177', img: '/user_456141.png', status: 'good' },
-  { nama: 'Anderson', ip_address: '90.222.115.117', img: '/user_456141.png', status: 'bad' },
-  { nama: 'Bartholome', ip_address: '226.35.252.40', img: '/user_456141.png', status: 'good' },
-  { nama: 'Katherine', ip_address: '4.24.53.4', img: '/user_456141.png', status: 'good' },
-  { nama: 'Sonny', ip_address: '178.234.93.28', img: '/user_456141.png', status: 'good' },
-  { nama: 'Erica', ip_address: '168.33.31.211', img: '/user_456141.png', status: 'good' },
-  { nama: 'Dolores', ip_address: '108.200.65.186', img: '/user_456141.png', status: 'good' },
-  { nama: 'Nestor', ip_address: '15.183.109.37', img: '/user_456141.png', status: 'good' },
-  { nama: 'Kaleb', ip_address: '234.130.24.201', img: '/user_456141.png', status: 'good' },
-  { nama: 'John', ip_address: '153.5.43.225', img: '/user_456141.png', status: 'good' },
-  { nama: 'Libby', ip_address: '196.148.18.80', img: '/user_456141.png', status: 'good' },
-  { nama: 'Deion', ip_address: '136.237.97.201', img: '/user_456141.png', status: 'good' },
-  { nama: 'Tyler', ip_address: '172.66.112.226', img: '/user_456141.png', status: 'bad' },
-  { nama: 'Mac', ip_address: '43.23.229.99', img: '/user_456141.png', status: 'good' },
-])
+const sessions = [
+  { key: 'listening', label: 'Listening' },
+  { key: 'grammar', label: 'Grammar' },
+  { key: 'reading', label: 'Reading' },
+]
+const activeSession = ref('listening')
+const users = ref([])
+const loading = ref(true)
+const error = ref(false)
+
+const filteredUsers = computed(() =>
+  users.value.filter(u => u.session === activeSession.value)
+)
+
+onMounted(async () => {
+  try {
+    users.value = useMockMonitoringUsers()
+  } catch {
+    error.value = true
+  } finally {
+    loading.value = false
+  }
+})
 </script>

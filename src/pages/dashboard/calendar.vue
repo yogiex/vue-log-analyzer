@@ -1,22 +1,85 @@
 <template>
   <div>
-    <v-sheet class="d-flex" height="54" tile>
-      <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense
-        hide-details />
-      <v-select v-model="weekday" :items="weekdays" class="ma-2" label="weekdays" variant="outlined" dense
-        hide-details />
-    </v-sheet>
-    <v-skeleton-loader v-if="loading" type="image" height="400" />
-    <template v-else>
-      <v-sheet>
-        <v-calendar ref="calendar" v-model="value" :events="events" :view-mode="type" :weekdays="weekday" />
-      </v-sheet>
-      <v-card v-if="!events.length" class="text-center pa-8 mt-4">
-        <v-icon size="48" color="grey-lighten-1">mdi-calendar-blank</v-icon>
-        <p class="text-h6 mt-2">No events scheduled</p>
-        <p class="text-body-2 text-grey">Add events to see them on the calendar</p>
-      </v-card>
-    </template>
+    <h1 class="text-h4 mb-4">
+      <v-icon class="me-2" color="primary">mdi-calendar</v-icon>
+      Calendar
+    </h1>
+
+    <v-breadcrumbs density="comfortable" divider="›" class="px-0 pt-0 pb-4" :items="[
+      { title: 'Dashboard', disabled: false, href: '/dashboard' },
+      { title: 'Calendar', disabled: true },
+    ]" />
+
+    <v-card class="pa-4">
+      <v-card-item>
+        <template #prepend>
+          <v-icon color="primary" aria-label="Calendar">mdi-calendar</v-icon>
+        </template>
+        <v-card-title class="text-h6">Event Calendar</v-card-title>
+      </v-card-item>
+
+      <v-card-text>
+        <v-sheet class="d-flex flex-wrap ga-2 mb-4" rounded="0">
+          <v-select
+            v-model="type"
+            :items="types"
+            label="View Mode"
+            variant="outlined"
+            density="compact"
+            hide-details
+            class="flex-shrink-0"
+            style="min-width: 140px"
+            aria-label="Calendar view mode"
+          />
+          <v-select
+            v-model="weekday"
+            :items="weekdays"
+            label="Weekdays"
+            variant="outlined"
+            density="compact"
+            hide-details
+            class="flex-shrink-0"
+            style="min-width: 160px"
+            aria-label="Weekday display mode"
+          />
+        </v-sheet>
+
+        <v-alert
+          v-if="error"
+          type="error"
+          variant="tonal"
+          class="mb-4"
+          title="Failed to load events"
+          text="Unable to load calendar events. Please try again later."
+          closable
+          @click:close="error = false"
+        />
+
+        <v-skeleton-loader
+          v-if="loading"
+          type="image"
+          height="400"
+          role="status"
+          aria-label="Loading calendar"
+        />
+
+        <div v-else aria-live="polite">
+          <v-sheet>
+            <v-calendar ref="calendar" v-model="value" :events="events" :view-mode="type" :weekdays="weekday" />
+          </v-sheet>
+
+          <v-card
+            v-if="!events.length"
+            class="text-center pa-8 mt-4"
+            variant="tonal"
+          >
+            <v-icon size="48" color="medium-emphasis">mdi-calendar-blank</v-icon>
+            <p class="text-h6 mt-2 text-medium-emphasis">No events scheduled</p>
+            <p class="text-body-2 text-disabled">Add events to see them on the calendar</p>
+          </v-card>
+        </div>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -37,9 +100,15 @@ const weekdays = [
 const value = ref([new Date()])
 const events = ref([])
 const loading = ref(true)
+const error = ref(false)
 
 onMounted(() => {
-  events.value = useMockCalendarEvents()
-  loading.value = false
+  try {
+    events.value = useMockCalendarEvents()
+  } catch {
+    error.value = true
+  } finally {
+    loading.value = false
+  }
 })
 </script>

@@ -30,8 +30,8 @@ function generateUsers(count = 50) {
       lastname: faker.person.lastName(),
       email: faker.internet.email(),
       quiz_name: faker.helpers.arrayElement(['EPrT Listening', 'EPrT Grammar', 'EPrT Reading']),
-      timestart: timestart.toISOString(),
-      timefinish: timefinish.toISOString(),
+      timestart: timestart.toLocaleString('id-ID'),
+      timefinish: timefinish.toLocaleString('id-ID'),
       diff_time_minute: Math.round((timefinish - timestart) / 60000),
       session: faker.helpers.arrayElement(SESSIONS),
       score: faker.number.int({ min: 200, max: 500 }),
@@ -56,7 +56,7 @@ function generateLogs(count = 100) {
       quiz_id: faker.number.int({ min: 1, max: 50 }),
       quiz_name: faker.helpers.arrayElement(['EPrT Listening', 'EPrT Grammar', 'EPrT Reading']),
       target: faker.number.int({ min: 100, max: 999 }),
-      timecreated: randomDate(new Date('2026-01-01'), new Date('2026-06-21')).toISOString(),
+      timecreated: randomDate(new Date('2026-01-01'), new Date('2026-06-21')).toLocaleString('id-ID'),
       user_firstname: faker.person.firstName(),
     })
   }
@@ -104,6 +104,51 @@ export function useMockFindings(count = 15) {
     time_taken: u.diff_time_minute,
     status: i % 3 === 0 ? -1 : 1,
   }))
+}
+
+export function useMockMonitoringUsers(count = 20) {
+  const badReasons = [
+    'Multiple failed login attempts detected',
+    'Access from unusual geographic location',
+    'Suspicious rapid-fire request pattern',
+    'Multiple concurrent sessions detected',
+    'Unusual activity outside normal hours',
+    'Known malicious IP address range',
+    'Abnormal navigation pattern detected',
+  ]
+  const goodReasons = [
+    'Normal activity pattern within session',
+    'Consistent access from registered IP',
+    'Regular engagement with course materials',
+    'No anomalous behavior detected',
+    'Standard access pattern within limits',
+    'Verified user session with stable connection',
+  ]
+  return Array.from({ length: count }, () => {
+    const session = faker.helpers.arrayElement(SESSIONS)
+    const isBad = faker.helpers.arrayElement([true, false])
+    return {
+      nama: faker.person.firstName(),
+      ip_address: faker.internet.ip(),
+      img: '/user_456141.png',
+      status: isBad ? 'bad' : 'good',
+      reason: isBad
+        ? faker.helpers.arrayElement(badReasons)
+        : faker.helpers.arrayElement(goodReasons),
+      session,
+    }
+  })
+}
+
+export function useMockThresholds() {
+  return [
+    { title: 'Listening Threshold', key: 'listening', value: '', min: 0, max: 100 },
+    { title: 'Grammar Threshold', key: 'grammar', value: '', min: 0, max: 100 },
+    { title: 'Reading Threshold', key: 'reading', value: '', min: 0, max: 100 },
+    { title: 'Writing Threshold', key: 'writing', value: '', min: 0, max: 100 },
+    { title: 'Speaking Threshold', key: 'speaking', value: '', min: 0, max: 100 },
+    { title: 'Overall Threshold', key: 'overall', value: '', min: 0, max: 100 },
+  ]
 }
 
 export function useMockChartData() {
