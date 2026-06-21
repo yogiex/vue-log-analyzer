@@ -1,56 +1,49 @@
 <template>
-    <v-layout class="rounded rounded-md" style="min-height: 100vh;">
-      <NavbarLayout />
-      <SidebarLayout />
-      <v-main>
-        <v-container>
-          <h1>Data Details Backup Files</h1>
-          <v-data-table :headers="headers" :items="dataFiles" :search="search">
-            <template v-slot:item.actions="{ item }">
-                <a :href="item.url">
-                    <v-icon>mdi-cloud-print</v-icon>
-                </a>
-          </template>
-          </v-data-table>
-        </v-container>
-      </v-main>
-  
-    </v-layout>
-  </template>
+  <div>
+    <h1 class="text-h4 mb-4">Data Details Backup Files</h1>
+    <v-skeleton-loader v-if="loading" type="table" />
+    <template v-else>
+      <v-data-table v-if="dataFiles.length" :headers="headers" :items="dataFiles" :search="search">
+        <template v-slot:item.actions="{ item }">
+          <v-btn variant="text" size="small" icon :href="item.url" target="_blank" aria-label="Download file">
+            <v-icon>mdi-cloud-print</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+      <v-card v-else class="text-center pa-8">
+        <v-icon size="48" color="grey-lighten-1">mdi-database-off</v-icon>
+        <p class="text-h6 mt-2">No backup files found</p>
+        <p class="text-body-2 text-grey">Connect to backend or check mock data source</p>
+      </v-card>
+    </template>
+  </div>
+</template>
 
-<script>
-import NavbarLayout from '@/layouts/dashboard/navbarLayout.vue';
-import SidebarLayout from '@/layouts/dashboard/sidebarLayout.vue';
-import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
+import { useMockBackupFiles } from '@/composables/useMockData'
 
-export default {
-  components: { NavbarLayout, SidebarLayout },
-  methods: {
-    async downloadsFile(){
+const route = useRoute()
+const url = import.meta.env.VITE_URL_FLASK_API
+const search = ref('')
+const headers = [
+  { key: 'title', title: 'Title' },
+  { key: 'url', title: 'Url' },
+  { key: 'actions', title: 'Actions' },
+]
+const dataFiles = ref([])
+const loading = ref(true)
 
-    }
-  },
-  data() {
-    return {
-      search: '',
-      headers: [
-        { key: 'title', title: 'Title ' },
-        { key: 'url', title: 'Url' },
-        { key: 'actions', title: 'Actions' },
-      ],
-      dataFiles: [],
-    }
-  },
-  async onMounted(){
-  },
-  async mounted() {
-    const route = useRoute();
-    const id = route.params.id;
-    console.log(route.params.id)
-    console.log(id)
-    const response = await axios.get(`http://180.250.135.11:8443/directory/${id}`);
-    this.dataFiles = response.data
+onMounted(async () => {
+  try {
+    const { data } = await axios.get(`${url}/directory/${route.params.id}`)
+    dataFiles.value = data
+  } catch {
+    dataFiles.value = useMockBackupFiles()
+  } finally {
+    loading.value = false
   }
-}
+})
 </script>

@@ -1,10 +1,7 @@
 <template>
-    <monitoringUser/>
+  <monitoringUser />
 </template>
 
-<script>
+<script setup>
 import monitoringUser from '@/components/monitoringUser.vue'
-export default {
-    components: {monitoringUser}
-}
 </script>

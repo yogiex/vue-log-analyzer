@@ -1,106 +1,82 @@
 <template>
-  <DashboardLayout>
-    <v-container>
-      <v-card>
-        <v-btn class="ml-3 my-3" variant="tonal" @click="backup()">
-          Backup!!
+  <v-card>
+    <v-card-title>
+      <v-btn variant="tonal" color="primary" @click="backup" class="mr-4">Backup</v-btn>
+    </v-card-title>
+    <v-card-text>
+      <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line variant="outlined"
+        hide-details />
+    </v-card-text>
+    <div v-if="loading" class="text-center pa-4">
+      <v-progress-circular indeterminate :size="70" :width="7" color="primary" />
+    </div>
+    <v-data-table v-if="dataFiles.length" :headers="headers" :items="dataFiles" :search="search" dense>
+      <template v-slot:item.actions="{ item }">
+        <v-btn variant="text" size="small" icon :to="'/dashboard/backups/' + item.title" aria-label="Download backup file">
+          <v-icon>mdi-cloud-print</v-icon>
         </v-btn>
-        <template v-slot:text>
-          <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi-magnify" single-line variant="outlined"
-            hide-details></v-text-field>
-        </template>
-        <!-- Progress Circular -->
-        <div v-if="loading" class="text-center">
-          <v-progress-circular indeterminate :size="70" :width="7" color="primary"></v-progress-circular>
-        </div>
-        <!-- end of progress circular -->
-        <v-data-table :headers="headers" :items="dataFiles" :search="search" dense>
-          <template v-slot:item.actions="{ item }">
-            <a :href="'/dashboard/downloads/' + item.title">
-              <v-icon>mdi-cloud-print</v-icon>
-            </a>
-          </template>
-        </v-data-table>
-        <!-- start of dialog modal -->
-        <!-- Modal for Notifications -->
-        <v-dialog v-model="dialog" max-width="400">
-          <v-card>
-            <v-card-title class="text-h6">Notification</v-card-title>
-            <v-card-text>{{ dialogMessage }}</v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" text @click="dialog = false">OK</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!-- end of dialog modal -->
+      </template>
+    </v-data-table>
+    <v-card v-else-if="!loading" class="text-center pa-8">
+      <v-icon size="48" color="grey-lighten-1">mdi-database-off</v-icon>
+      <p class="text-h6 mt-2">No backup files found</p>
+      <p class="text-body-2 text-grey">Run a backup to see files here</p>
+    </v-card>
+    <v-dialog v-model="dialog" max-width="400">
+      <v-card>
+        <v-card-title class="text-h6">Notification</v-card-title>
+        <v-card-text>{{ dialogMessage }}</v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="dialog = false">OK</v-btn>
+        </v-card-actions>
       </v-card>
-
-    </v-container>
-  </DashboardLayout>
+    </v-dialog>
+  </v-card>
 </template>
 
-<script>
-import DashboardLayout from '@/layouts/dashboard/dashboardLayout.vue';
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { useMockBackupFiles } from '@/composables/useMockData'
 
-import axios from 'axios';
-let urlEndpoint = import.meta.env.VITE_URL_FLASK_API
-let dataFiles = []
-export default {
-  components: { DashboardLayout },
-  methods: {
-    async backup() {
-      this.loading = true; // Start loading
-      try {
-        const response = await axios.post(`${urlEndpoint}/dump`);
-        console.log(response);
-        this.dialogMessage = response.data || 'Backup completed successfully.'; // Set success message
-        this.dialog = true; // Show dialog
+const urlEndpoint = import.meta.env.VITE_URL_FLASK_API
+const search = ref('')
+const headers = [
+  { key: 'title', title: 'Title' },
+  { key: 'url', title: 'Url' },
+  { key: 'actions', title: 'Actions' },
+]
+const dataFiles = ref([])
+const loading = ref(false)
+const dialog = ref(false)
+const dialogMessage = ref('')
 
-        // Fetch updated directory after backup
-        try {
-          const directoryResponse = await axios.get(`${urlEndpoint}/directory`);
-          this.dataFiles = directoryResponse.data; // Populate the data table
-          console.log('Fetched data files:', directoryResponse.data);
-        } catch (directoryError) {
-          console.error('Error fetching data files:', directoryError);
-          this.dialogMessage = 'Backup completed, but failed to load updated data files.';
-          this.dialog = true;
-        }
-      } catch (error) {
-        console.error('Error during backup:', error);
-        this.dialogMessage = 'Backup failed. Please try again.'; // Set error message
-        this.dialog = true; // Show dialog
-      } finally {
-        this.loading = false; // Stop loading
-      }
-    },
-  },
-  data() {
+onMounted(async () => {
+  try {
+    const { data } = await axios.get(`${urlEndpoint}/directory`)
+    dataFiles.value = data
+  } catch {
+    dataFiles.value = useMockBackupFiles()
+  }
+})
 
-    return {
-      search: '',
-      headers: [
-        { key: 'title', title: 'Title ' },
-        { key: 'url', title: 'Url' },
-        { key: 'actions', title: 'Actions' },
-      ],
-      dataFiles: [],
-      downloadLink: [],
-      loading: false,
-      dialog: false,
-      dialogMessage: ''
+async function backup() {
+  loading.value = true
+  try {
+    const response = await axios.post(`${urlEndpoint}/dump`)
+    dialogMessage.value = response.data || 'Backup completed successfully.'
+    dialog.value = true
+    try {
+      const { data } = await axios.get(`${urlEndpoint}/directory`)
+      dataFiles.value = data
+    } catch {
+      dataFiles.value = useMockBackupFiles()
     }
-  },
-  async mounted() {
-  },
-  async beforeMount() {
-    const response = await axios.get(`${urlEndpoint}/directory`)
-    // response
-    this.dataFiles = response.data
-    // console.log(response.data)
-    // console.log(`${urlEndpoint}/directory`)
-
-
+  } catch {
+    dialogMessage.value = 'Backup failed. Please try again.'
+    dialog.value = true
+  } finally {
+    loading.value = false
   }
 }
 </script>
