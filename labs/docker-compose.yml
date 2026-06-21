@@ -1,0 +1,93 @@
+version: "3.8"
+
+# =============================================================================
+# Layanan: Database MySQL
+# =============================================================================
+services:
+  db:
+    image: mysql:8.0                       # Menggunakan MySQL versi 8.0
+    restart: unless-stopped                # Restart otomatis kecuali dimatikan manual
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123 # Password root (wajib diubah untuk production)
+      MYSQL_DATABASE: moodle               # Nama database yang akan dibuat otomatis
+      MYSQL_USER: moodleuser               # User khusus untuk Moodle
+      MYSQL_PASSWORD: moodlepass           # Password user Moodle
+    volumes:
+      - db_data:/var/lib/mysql             # Volume persisten agar data aman saat container dihapus
+    # Port 3306 tidak diekspos ke host – hanya bisa diakses oleh container lain di jaringan yang sama
+    # Keamanan: Tidak ada akses langsung dari luar container ke database
+
+  # =============================================================================
+  # Layanan: Moodle LMS (Bitnami)
+  # =============================================================================
+  moodle:
+    image: bitnami/moodle:latest           # Image Moodle dari Bitnami (mudah dikonfigurasi)
+    restart: unless-stopped
+    environment:
+      MOODLE_DATABASE_HOST: db             # Host database (nama service di dalam docker-compose)
+      MOODLE_DATABASE_PORT_NUMBER: 3306    # Port default MySQL
+      MOODLE_DATABASE_NAME: moodle         # Nama database yang digunakan
+      MOODLE_DATABASE_USER: moodleuser     # User database
+      MOODLE_DATABASE_PASSWORD: moodlepass # Password database
+      MOODLE_USERNAME: admin               # Akun administrator pertama Moodle
+      MOODLE_PASSWORD: admin123            # Password admin (harus diubah setelah instalasi)
+      MOODLE_EMAIL: admin@example.com      # Email admin (untuk pemulihan akun)
+      MOODLE_SITE_NAME: "LMS Moodle EPrT"  # Nama situs yang akan muncul di halaman depan
+    volumes:
+      - moodle_data:/bitnami/moodle        # Data Moodle disimpan di volume persisten
+    depends_on:
+      - db                                 # Tunggu database siap sebelum Moodle berjalan
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7071"]  # Cek kesehatan melalui port 7071 (diganti sesuai permintaan)
+      interval: 30s                        # Periksa setiap 30 detik
+      timeout: 10s                         # Timeout jika tidak respons dalam 10 detik
+      retries: 5                           # Maksimal 5 kali gagal sebelum dianggap tidak sehat
+    ports:
+      - "8080:8080"                        # Ekspos port internal Apache ke host (opsional, bisa ditutup jika hanya akses via Nginx)
+
+  # =============================================================================
+  # Layanan: Nginx (Web Server / Reverse Proxy)
+  # =============================================================================
+  nginx:
+    image: nginx:alpine                    # Image Nginx ringan (Alpine Linux)
+    restart: unless-stopped
+    ports:
+      - "7070:80"                          # Port akses utama Moodle dari browser (http://localhost:7070)
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro   # Konfigurasi custom Nginx (read-only)
+    depends_on:
+      - moodle                             # Pastikan Moodle sudah berjalan sebelum Nginx
+
+  # =============================================================================
+  # Layanan: Seeder (Otomatisasi Konfigurasi Awal Moodle)
+  # =============================================================================
+  seeder:
+    image: bitnami/moodle:latest           # Menggunakan image yang sama karena memiliki CLI `moosh`
+    restart: "no"                          # Hanya berjalan sekali, lalu mati
+    depends_on:
+      moodle:
+        condition: service_healthy         # Baru dijalankan setelah Moodle benar-benar sehat (healthcheck lolos)
+    volumes:
+      - moodle_data:/bitnami/moodle        # Perlu akses ke data Moodle untuk membaca config.php
+    environment:
+      MOODLE_DATABASE_HOST: db
+      MOODLE_DATABASE_PORT_NUMBER: 3306
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodleuser
+      MOODLE_DATABASE_PASSWORD: moodlepass
+    command: >
+      bash -c "
+        echo 'Menunggu Moodle siap...' &&
+        sleep 20 &&
+        echo 'Mulai seeding...' &&
+        moosh -n course-create --category 1 --fullname 'EPrT Course' --shortname eprt &&
+        moosh -n quiz-create --course 2 --name 'EPrT Placement Test' --intro 'Tes penempatan EPrT' &&
+        echo '✅ Seeding selesai.';
+      "
+
+# =============================================================================
+# Volume Persisten (Disimpan oleh Docker)
+# =============================================================================
+volumes:
+  db_data:      # Data MySQL
+  moodle_data:  # Data Moodle (file konfigurasi, course, dll.)
