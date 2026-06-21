@@ -1,8 +1,75 @@
-version: '3.1'                                                                                                                                                       
-services:                                                                                                                                                            
- web:                                                                                                                                                                
-  container_name: flask-log                                                                                                                                          
-  build: .                                                                                                                                                           
-  ports:                                                                                                                                                             
-   - 5000:5000                                                                                                                                                       
-                          
+version: "3.8"
+
+services:
+  # =============================================
+  # Database (MySQL/MariaDB) – gunakan MariaDB (lebih ringan)
+  # =============================================
+  db:
+    image: mariadb:10.11                    # ~400 MB (vs MySQL 8.0 ~500 MB)
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    # Tidak ada ports -> hanya bisa diakses oleh container lain
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =============================================
+  # Flask API (Backend Utama)
+  # =============================================
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    restart: unless-stopped
+    ports:
+      - "8443:8443"            # Port sesuai app.py
+    environment:
+      - FLASK_ENV=production
+      # Database source (VM-B, lokal)
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      # Token Telegram (untuk notifier sync sederhana)
+      - TOKEN_BOT_TELEGRAM=${TOKEN_BOT_TELEGRAM}
+      # API key internal
+      - API_KEY=${API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./models:/app/models          # Model pkl (read-only)
+      - backup_data:/app/backup-file  # Folder backup hasil dump
+
+  # =============================================
+  # Telegram Bot (dipisah agar ringan & independen)
+  # =============================================
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    restart: unless-stopped
+    environment:
+      - TOKEN_BOT_TELEGRAM=${TOKEN_BOT_TELEGRAM}
+      - API_KEY=${API_KEY}
+      # Untuk akses database jika bot perlu baca proctor
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    depends_on:
+      - flask
+    volumes:
+      - backup_data:/app/backup-file   # Opsional, jika bot perlu akses file
+
+volumes:
+  db_data:
+  backup_data:
